@@ -1,6 +1,37 @@
 <?php defined('SYSPATH') or die('No direct script access.');
-
-class Cache_Memcache extends Cache {
+/**
+ * Kohana Cache Memcache Driver
+ * 
+ * Memcache support for Kohana Cache. This currently uses an
+ * internal tagging system. However this will not work if the
+ * tagging storage exceeds 1MB, so can be disabled.
+ * 
+ * If you require a robust tagging solution for tagging
+ * within Memcache, it is recommended you use
+ * 
+ * @todo Create a new Memcache-tag driver for native tagging
+ * support
+ *
+ * @package Cache
+ * @author Sam de Freyssinet <sam@def.reyssi.net>
+ * @copyright (c) 2009 Sam de Freyssinet
+ * @license ISC http://www.opensource.org/licenses/isc-license.txt
+ * Permission to use, copy, modify, and/or distribute 
+ * this software for any purpose with or without fee
+ * is hereby granted, provided that the above copyright 
+ * notice and this permission notice appear in all copies.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS 
+ * ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL 
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO 
+ * EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, 
+ * INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES 
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, 
+ * WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER 
+ * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH 
+ * THE USE OR PERFORMANCE OF THIS SOFTWARE.
+ */
+class Cache_Memcache extends Cache_Tagging {
 
 	/**
 	 * The key used for the tagging index
@@ -166,6 +197,29 @@ class Cache_Memcache extends Cache {
 	 */
 	public function set($id, $data, $lifetime = NULL, array $tags = NULL)
 	{
+		// Normalise the lifetime
+		if (NULL === $lifetime)
+			$lifetime = 0;
+		else
+			$lifetime += time();
+
+		// Set the data to memcache
+		return $this->_memcache->set($this->sanitize_id($id), $data, $this->_flags, $lifetime);
+	}
+
+	/**
+	 * Set a value based on an id with tags
+	 * 
+	 * @param string $id 
+	 * @param string $data 
+	 * @param integer $lifetime [Optional]
+	 * @param array $tags [Optional]
+	 * @return boolean
+	 * @access public
+	 * @throws Cache_Exception
+	 */
+	public function set_with_tags($id, $data, $lifetime = NULL, array $tags = NULL)
+	{
 		// If tags are being set, but disabled, get rid of them
 		if ( ! Cache_Memcache::$_tagging and $tags)
 			throw new Cache_Exception('Trying to set using tags when tagging is disabled!');
@@ -179,14 +233,7 @@ class Cache_Memcache extends Cache {
 			Cache_Memcache::$_tags_changed = TRUE;
 		}
 
-		// Normalise the lifetime
-		if (NULL === $lifetime)
-			$lifetime = 0;
-		else
-			$lifetime += time();
-
-		// Set the data to memcache
-		return $this->_memcache->set($id, $data, $this->_flags, $lifetime);
+		return $this->set($id, $data, $lifetime);
 	}
 
 	/**

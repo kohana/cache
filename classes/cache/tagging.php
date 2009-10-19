@@ -1,8 +1,9 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /**
- * Kohana Cache
+ * Kohana Cache Tagging
  * 
- * Caching library for Kohana PHP 3
+ * Adds additional method definitions required for support of
+ * tags.
  *
  * @package Cache
  * @author Sam de Freyssinet <sam@def.reyssi.net>
@@ -23,37 +24,7 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH 
  * THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-abstract class Kohana_Cache {
-
-	/**
-	 * Ensures singleton pattern is observed
-	 *
-	 * @access protected
-	 * @abstract
-	 */
-	abstract protected function __construct();
-
-	/**
-	 * Overload the __clone() method to prevent cloning
-	 *
-	 * @return void
-	 * @access public
-	 */
-	public function __clone()
-	{
-		throw new Cache_Exception('Cloning of Kohana_Cache objects is forbidden');
-	}
-
-	/**
-	 * Retrieve a value based on an id
-	 *
-	 * @param string $id 
-	 * @param string $default [Optional] Default value to return if id not found
-	 * @return mixed
-	 * @access public
-	 * @abstract
-	 */
-	abstract public function get($id, $default = NULL);
+abstract class Cache_Tagging extends Cache {
 
 	/**
 	 * Set a value based on an id. Optionally add tags.
@@ -64,43 +35,32 @@ abstract class Kohana_Cache {
 	 * @param string $id 
 	 * @param string $data 
 	 * @param integer $lifetime [Optional]
+	 * @param array $tags [Optional]
 	 * @return boolean
 	 * @access public
 	 * @abstract
 	 */
-	abstract public function set($id, $data, $lifetime = NULL);
+	abstract public function set_with_tags($id, $data, $lifetime = NULL, array $tags = NULL);
 
 	/**
-	 * Delete a cache entry based on id
+	 * Delete cache entries based on a tag
 	 *
-	 * @param string $id 
+	 * @param string $tag 
 	 * @param integer $timeout [Optional]
 	 * @return boolean
 	 * @access public
 	 * @abstract
 	 */
-	abstract public function delete($id);
+	abstract public function delete_tag($tag);
 
 	/**
-	 * Delete all cache entries
+	 * Find cache entries based on a tag
 	 *
-	 * @return boolean
+	 * @param string $tag 
+	 * @return mixed
 	 * @access public
 	 * @abstract
+	 * @abstract
 	 */
-	abstract public function delete_all();
-
-	/**
-	 * Replaces troublesome characters with underscores.
-	 *
-	 * @param string $id
-	 * @return string
-	 * @access protected
-	 */
-	protected function sanitize_id($id)
-	{
-		// Change slashes and spaces to underscores
-		return str_replace(array('/', '\\', ' '), '_', $id);
-	}
+	abstract public function find($tag);
 }
-// End Kohana_Cache
