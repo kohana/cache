@@ -108,13 +108,15 @@ class Cache_Sqlite extends Cache implements Cache_Tagging {
 		// Try and load the cache based on id
 		try
 		{
-			if ( ! $statement->execute(array(':id' => $id))->fetch(PDO::FETCH_OBJ))
-				return $default;
+			$statement->execute(array(':id' => $id));
 		}
 		catch (PDOException $e)
 		{
 			throw new Cache_Exception('There was a problem querying the local SQLite3 cache. :error', array(':error' => $e->getMessage()));
 		}
+
+		if ( ! $result = $statement->fetch(PDO::FETCH_OBJ))
+			return $default;
 
 		// If the cache has expired
 		if ($result->expiration != 0 and $result->expiration <= time())
