@@ -1,10 +1,7 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /**
- * Kohana Cache Tagging
+ * Kohana Cache Tagging Interface
  * 
- * Adds additional method definitions required for support of
- * tags.
- *
  * @package Cache
  * @author Sam de Freyssinet <sam@def.reyssi.net>
  * @copyright (c) 2009 Sam de Freyssinet
@@ -24,7 +21,7 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH 
  * THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-abstract class Cache_Tagging extends Cache {
+interface Cache_Tagging {
 
 	/**
 	 * Set a value based on an id. Optionally add tags.
@@ -38,9 +35,8 @@ abstract class Cache_Tagging extends Cache {
 	 * @param array $tags [Optional]
 	 * @return boolean
 	 * @access public
-	 * @abstract
 	 */
-	abstract public function set_with_tags($id, $data, $lifetime = NULL, array $tags = NULL);
+	public function set_with_tags($id, $data, $lifetime = NULL, array $tags = NULL);
 
 	/**
 	 * Delete cache entries based on a tag
@@ -49,9 +45,8 @@ abstract class Cache_Tagging extends Cache {
 	 * @param integer $timeout [Optional]
 	 * @return boolean
 	 * @access public
-	 * @abstract
 	 */
-	abstract public function delete_tag($tag);
+	public function delete_tag($tag);
 
 	/**
 	 * Find cache entries based on a tag
@@ -59,8 +54,6 @@ abstract class Cache_Tagging extends Cache {
 	 * @param string $tag 
 	 * @return mixed
 	 * @access public
-	 * @abstract
-	 * @abstract
 	 */
-	abstract public function find($tag);
+	public function find($tag);
 }
