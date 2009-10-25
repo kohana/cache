@@ -108,7 +108,7 @@ class Cache_Sqlite extends Cache implements Cache_Tagging {
 		// Try and load the cache based on id
 		try
 		{
-			$statement->execute(array(':id' => $id));
+			$statement->execute(array(':id' => $this->sanitize_id($id)));
 		}
 		catch (PDOException $e)
 		{
@@ -173,7 +173,7 @@ class Cache_Sqlite extends Cache implements Cache_Tagging {
 		// Remove the entry
 		try
 		{
-			$statement->execute(array(':id' => $id));
+			$statement->execute(array(':id' => $this->sanitize_id($id)));
 		}
 		catch (PDOException $e)
 		{
@@ -238,7 +238,7 @@ class Cache_Sqlite extends Cache implements Cache_Tagging {
 		// Try to insert
 		try
 		{
-			$statement->execute(array(':id' => $id, ':cache' => $data, ':expiration' => $lifetime, ':tags' => $tags));
+			$statement->execute(array(':id' => $this->sanitize_id($id), ':cache' => $data, ':expiration' => $lifetime, ':tags' => $tags));
 		}
 		catch (PDOException $e)
 		{
@@ -323,7 +323,7 @@ class Cache_Sqlite extends Cache implements Cache_Tagging {
 	protected function exists($id)
 	{
 		$statement = $this->_db->prepare('SELECT id FROM caches WHERE id = :id');
-		$statement->execute(array(':id' => $id));
+		$statement->execute(array(':id' => $this->sanitize_id($id)));
 		return (bool) $statement->fetchAll();
 	}
 }
