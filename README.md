@@ -46,7 +46,7 @@ The following is a quick example of how to use Kohana Cache. The example is usin
 	$data = array('foo' => 'bar', 'apples' => 'pear', 'BDFL' => 'Shadowhand');
 	
 	// Save the data to cache, with an id of test_id and a lifetime of 10 minutes
-	$mycache->set('test_id', $data, time()+600);
+	$mycache->set('test_id', $data, 600);
 	
 	// Retrieve the data from cache
 	$retrieved_data = $mycache->get('test_id');
