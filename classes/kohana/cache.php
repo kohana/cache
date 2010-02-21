@@ -4,34 +4,54 @@
  * 
  * Caching library for Kohana PHP 3
  *
- * @package Cache
- * @author Sam de Freyssinet <sam@def.reyssi.net>
- * @copyright (c) 2009 Sam de Freyssinet
- * @license ISC http://www.opensource.org/licenses/isc-license.txt
- * Permission to use, copy, modify, and/or distribute 
- * this software for any purpose with or without fee
- * is hereby granted, provided that the above copyright 
- * notice and this permission notice appear in all copies.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS 
- * ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL 
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO 
- * EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, 
- * INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES 
- * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, 
- * WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER 
- * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH 
- * THE USE OR PERFORMANCE OF THIS SOFTWARE.
+ * @package    Kohana
+ * @category   Cache
+ * @author     Kohana Team
+ * @copyright  (c) 2009-2010 Kohana Team
+ * @license    http://kohanaphp.com/license
  */
 abstract class Kohana_Cache {
 
+	public static $instances = array();
+
 	/**
-	 * Ensures singleton pattern is observed
+	 * Get a singleton cache instance. If no configuration is specified,
+	 * it will be loaded using the standard configuration 'type' setting.
 	 *
-	 * @access protected
-	 * @abstract
+	 * @param   string   the name of the cache driver to use [Optional]
+	 * @return  Kohana_Cache
 	 */
-	abstract protected function __construct();
+	public static function instance($type = NULL)
+	{
+		// Resolve type
+		$type === NULL and $type = Kohana::config('cache.type');
+
+		// Return the current type if initiated already
+		if (isset(Cache::$instances[$type]))
+			return Cache::$instances[$type];
+
+		// Create a new cache type instance
+		$cache_class = 'Cache_'.ucfirst($type);
+		Cache::$instances[$type] = new $cache_class;
+
+		// Return the instance
+		return Cache::$instances[$type];
+	}
+
+	/**
+	 * The default expiry for cache items
+	 *
+	 * @var  int
+	 */
+	protected $_default_expire;
+
+	/**
+	 * Ensures singleton pattern is observed, loads the default expiry
+	 */
+	protected function __construct()
+	{
+		$this->_default_expire = Kohana::config('cache.default-expire');
+	}
 
 	/**
 	 * Overload the __clone() method to prevent cloning
@@ -41,7 +61,7 @@ abstract class Kohana_Cache {
 	 */
 	public function __clone()
 	{
-		throw new Cache_Exception('Cloning of Kohana_Cache objects is forbidden');
+		throw new Kohana_Cache_Exception('Cloning of Kohana_Cache objects is forbidden');
 	}
 
 	/**

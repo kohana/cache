@@ -19,8 +19,8 @@ Planned support
 
 In the near future, additional support for the following methods will be included.
 
-1. File (Supports tags)
-2. Xcache
+1. Xcache
+2. Memcached
 
 Introduction to caching
 -----------------------
@@ -40,7 +40,7 @@ Quick example
 The following is a quick example of how to use Kohana Cache. The example is using the SQLite driver.
 
 	// Get a Sqlite Cache instance  
-	$mycache = Cache_Sqlite::instance();
+	$mycache = Cache::instance('sqlite');
 	
 	// Create some data
 	$data = array('foo' => 'bar', 'apples' => 'pear', 'BDFL' => 'Shadowhand');
