@@ -39,6 +39,7 @@ Quick example
 
 The following is a quick example of how to use Kohana Cache. The example is using the SQLite driver.
 
+	<?php
 	// Get a Sqlite Cache instance  
 	$mycache = Cache::instance('sqlite');
 	
