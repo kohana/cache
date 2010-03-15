@@ -48,7 +48,7 @@ class Kohana_Cache_Apc extends Cache {
 	public function set($id, $data, $lifetime = NULL)
 	{
 		if (NULL === $lifetime)
-			$lifetime = time() + $this->_default_expire;
+			$lifetime = $this->_default_expire;
 
 		return apc_store($this->sanitize_id($id), $data, $lifetime);
 	}
