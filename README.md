@@ -13,14 +13,15 @@ Currently this module supports the following cache methods.
 3. Memcache
 4. Memcached-tags (Supports tags)
 5. SQLite (Supports tags)
+6. File
+7. Xcache
 
 Planned support
 ---------------
 
 In the near future, additional support for the following methods will be included.
 
-1. Xcache
-2. Memcached
+1. Memcached
 
 Introduction to caching
 -----------------------
