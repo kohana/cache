@@ -17,12 +17,14 @@ class Kohana_Cache_Apc extends Cache {
 	 *
 	 * @throws  Kohana_Cache_Exception
 	 */
-	protected function __construct()
+	protected function __construct($config)
 	{
-		parent::__construct();
-
 		if ( ! extension_loaded('apc'))
+		{
 			throw new Kohana_Cache_Exception('PHP APC extension is not available.');
+		}
+
+		parent::__construct($config);
 	}
 
 	/**
@@ -47,8 +49,10 @@ class Kohana_Cache_Apc extends Cache {
 	 */
 	public function set($id, $data, $lifetime = NULL)
 	{
-		if (NULL === $lifetime)
-			$lifetime = $this->_default_expire;
+		if ($lifetime === NULL)
+		{
+			$lifetime = Arr::get($this->_config, 'default_expire', Cache::DEFAULT_EXPIRE);
+		}
 
 		return apc_store($this->sanitize_id($id), $data, $lifetime);
 	}

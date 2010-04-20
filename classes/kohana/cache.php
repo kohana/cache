@@ -12,6 +12,9 @@
  */
 abstract class Kohana_Cache {
 
+	// Default expirary for groups without setting
+	const DEFAULT_EXPIRE = 3600;
+
 	public static $instances = array();
 
 	/**
@@ -21,36 +24,52 @@ abstract class Kohana_Cache {
 	 * @param   string   the name of the cache driver to use [Optional]
 	 * @return  Kohana_Cache
 	 */
-	public static function instance($type = NULL)
+	public static function instance($group = NULL)
 	{
-		// Resolve type
-		$type === NULL and $type = Kohana::config('cache.type');
+		$config = Kohana::config('cache');
 
-		// Return the current type if initiated already
-		if (isset(Cache::$instances[$type]))
-			return Cache::$instances[$type];
+		if ($group === NULL)
+		{
+			// If there is no config, try and load the default definition
+			$group = 'default';
+		}
+
+		if ( ! $config->offsetExists($group))
+		{
+			throw new Kohana_Cache_Exception('Failed to load Kohana Cache group: :group', array(':group' => $group));
+		}
+
+		if (isset(Cache::$instances[$group]))
+		{
+			// Return the current type if initiated already
+			return Cache::$instances[$group];
+		}
+
+		$config = $config->get($group);
 
 		// Create a new cache type instance
-		$cache_class = 'Cache_'.ucfirst($type);
-		Cache::$instances[$type] = new $cache_class;
+		$cache_class = 'Cache_'.ucfirst($config['driver']);
+		Cache::$instances[$group] = new $cache_class($config);
 
 		// Return the instance
-		return Cache::$instances[$type];
+		return Cache::$instances[$group];
 	}
 
 	/**
-	 * The default expiry for cache items
+	 * Configuration for this object
 	 *
-	 * @var  int
+	 * @var  Kohana_Config
 	 */
-	protected $_default_expire;
+	protected $_config;
 
 	/**
 	 * Ensures singleton pattern is observed, loads the default expiry
+	 * 
+	 * @param  Kohana_Config configuration
 	 */
-	protected function __construct()
+	protected function __construct($config)
 	{
-		$this->_default_expire = Kohana::config('cache.default-expire');
+		$this->_config = $config;
 	}
 
 	/**

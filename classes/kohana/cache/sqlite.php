@@ -25,11 +25,19 @@ class Kohana_Cache_Sqlite extends Cache implements Kohana_Cache_Tagging {
 	 *
 	 * @throws  Kohana_Cache_Exception
 	 */
-	protected function __construct()
+	protected function __construct($config)
 	{
-		parent::__construct();
+		parent::__construct($config);
 
-		$this->_db = new PDO('sqlite:'.Kohana::config('cache.sqlite.database'));
+		$database = Arr::get($this->_config, 'database', NULL);
+
+		if ($database === NULL)
+		{
+			throw new Kohana_Cache_Exception('Database path not available in Kohana Cache configuration');
+		}
+
+		// Load new Sqlite DB
+		$this->_db = new PDO('sqlite:'.$database);
 
 		// Test for existing DB
 		$result = $this->_db->query("SELECT * FROM sqlite_master WHERE name = 'caches' AND type = 'table'")->fetchAll();
@@ -37,10 +45,17 @@ class Kohana_Cache_Sqlite extends Cache implements Kohana_Cache_Tagging {
 		// If there is no table, create a new one
 		if (0 == count($result))
 		{
+			$database_schema = Arr::get($this->_config, 'schema', NULL);
+
+			if ($database_schema === NULL)
+			{
+				throw new Kohana_Cache_Exception('Database schema not found in Kohana Cache configuration');
+			}
+
 			try
 			{
 				// Create the caches table
-				$this->_db->query(Kohana::config('cache.sqlite.schema'));
+				$this->_db->query(Arr::get($this->_config, 'schema', NULL));
 			}
 			catch (PDOException $e)
 			{
@@ -73,7 +88,9 @@ class Kohana_Cache_Sqlite extends Cache implements Kohana_Cache_Tagging {
 		}
 
 		if ( ! $result = $statement->fetch(PDO::FETCH_OBJ))
+		{
 			return $default;
+		}
 
 		// If the cache has expired
 		if ($result->expiration != 0 and $result->expiration <= time())
@@ -180,10 +197,14 @@ class Kohana_Cache_Sqlite extends Cache implements Kohana_Cache_Tagging {
 		$tags = (NULL === $tags) ? NULL : '<'.implode('>,<', $tags).'>';
 
 		// Setup lifetime
-		if (NULL === $lifetime)
-			$lifetime = (0 === $this->_default_expire) ? 0 : $this->_default_expire + time();
+		if ($lifetime === NULL)
+		{
+			$lifetime = (0 === Arr::get('default_expire', NULL)) ? 0 : Arr::get($this->_config, 'default_expire', Cache::DEFAULT_EXPIRE) + time();
+		}
 		else
+		{
 			$lifetime = (0 === $lifetime) ? 0 : $lifetime + time();
+		}
 
 		// Prepare statement
 		// $this->exists() may throw Kohana_Cache_Exception, no need to catch/rethrow
@@ -244,7 +265,9 @@ class Kohana_Cache_Sqlite extends Cache implements Kohana_Cache_Tagging {
 		try
 		{
 			if ( ! $statement->execute(array(':tag' => "%<{$tag}>%")))
+			{
 				return array();
+			}
 		}
 		catch (PDOException $e)
 		{

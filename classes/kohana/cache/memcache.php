@@ -29,33 +29,39 @@ class Kohana_Cache_Memcache extends Cache {
 	 *
 	 * @throws  Kohana_Cache_Exception
 	 */
-	protected function __construct()
+	protected function __construct($config)
 	{
-		parent::__construct();
-
 		// Check for the memcache extention
 		if ( ! extension_loaded('memcache'))
+		{
 			throw new Kohana_Cache_Exception('Memcache PHP extention not loaded');
+		}
+
+		parent::__construct($config);
 
 		// Setup Memcache
 		$this->_memcache = new Memcache;
 
 		// Load servers from configuration
-		$servers = Kohana::config('cache.memcache.servers');
+		$servers = Arr::get($this->_config, 'servers', NULL);
 
-		// Throw an exception if no server found
 		if ( ! $servers)
+		{
+			// Throw an exception if no server found
 			throw new Kohana_Cache_Exception('No Memcache servers defined in configuration');
+		}
 
 		// Add the memcache servers to the pool
 		foreach ($servers as $server)
 		{
 			if ( ! $this->_memcache->addServer($server['host'], $server['port'], $server['persistent']))
+			{
 				throw new Kohana_Cache_Exception('Memcache could not connect to host \':host\' using port \':port\'', array(':host' => $server['host'], ':port' => $server['port']));
+			}
 		}
 
 		// Setup the flags
-		$this->_flags = Kohana::config('cache.memcache.compression') ? MEMCACHE_COMPRESSED : FALSE;
+		$this->_flags = Arr::get($this->_config, 'compression', FALSE) ? MEMCACHE_COMPRESSED : FALSE;
 	}
 
 	/**
@@ -71,8 +77,10 @@ class Kohana_Cache_Memcache extends Cache {
 		$value = $this->_memcache->get($this->sanitize_id($id));
 
 		// If the value wasn't found, normalise it
-		if (FALSE === $value)
+		if ($value === FALSE)
+		{
 			$value = (NULL === $default) ? NULL : $default;
+		}
 
 		// Return the value
 		return $value;
@@ -88,11 +96,15 @@ class Kohana_Cache_Memcache extends Cache {
 	 */
 	public function set($id, $data, $lifetime = NULL)
 	{
-		// Normalise the lifetime
-		if (NULL === $lifetime)
+		if ($lifetime === NULL)
+		{
+			// Normalise the lifetime
 			$lifetime = 0;
+		}
 		else
+		{
 			$lifetime += time();
+		}
 
 		// Set the data to memcache
 		return $this->_memcache->set($this->sanitize_id($id), $data, $this->_flags, $lifetime);

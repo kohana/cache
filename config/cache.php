@@ -2,10 +2,16 @@
 
 return array
 (
-	'type'               => 'apc',
-	'default-expire'     => 3600,
-	'memcache'           => array
+	'default'  => array
 	(
+		'driver'             => 'apc',
+		'default_expire'     => 3600,
+	),
+	'memcache' => array
+	(
+		'driver'             => 'memcache',
+		'default_expire'     => 3600,
+		'compression'        => FALSE,              // Use Zlib compression (can cause issues with integers)
 		'servers'            => array
 		(
 			array
@@ -15,11 +21,12 @@ return array
 				'persistent'       => FALSE,        // Persistent connection
 			),
 		),
-		'compression'         => FALSE,        // Use Zlib compression (can cause issues with integers)
 	),
-	'sqlite'             => array
+	'sqlite'   => array
 	(
-		'database'        => APPPATH.'cache/kohana-cache.sql3',
-		'schema'          => 'CREATE TABLE caches(id VARCHAR(127) PRIMARY KEY, tags VARCHAR(255), expiration INTEGER, cache TEXT)',
+		'driver'             => 'sqlite',
+		'default_expire'     => 3600,
+		'database'           => APPPATH.'cache/kohana-cache.sql3',
+		'schema'             => 'CREATE TABLE caches(id VARCHAR(127) PRIMARY KEY, tags VARCHAR(255), expiration INTEGER, cache TEXT)',
 	),
 );
