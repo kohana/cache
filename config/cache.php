@@ -29,4 +29,8 @@ return array
 		'database'           => APPPATH.'cache/kohana-cache.sql3',
 		'schema'             => 'CREATE TABLE caches(id VARCHAR(127) PRIMARY KEY, tags VARCHAR(255), expiration INTEGER, cache TEXT)',
 	),
+	'xcache'   => array
+	(
+		'driver'             => 'xcache'
+	),
 );

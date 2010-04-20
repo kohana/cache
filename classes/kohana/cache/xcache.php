@@ -18,12 +18,14 @@ class Kohana_Cache_Xcache extends Cache {
 	 *
 	 * @throws  Kohana_Cache_Exception
 	 */
-	protected function __construct()
+	protected function __construct($config)
 	{
-		parent::__construct();
-
 		if ( ! extension_loaded('xcache'))
+		{
 			throw new Kohana_Cache_Exception('PHP Xcache extension is not available.');
+		}
+
+		parent::__construct($config);
 	}
 
 	/**
@@ -49,7 +51,9 @@ class Kohana_Cache_Xcache extends Cache {
 	public function set($id, $data, $lifetime = NULL)
 	{
 		if (NULL === $lifetime)
-			$lifetime = $this->_default_expire;
+		{
+			$lifetime = Arr::get($this->_config, 'default_expire', Cache::DEFAULT_EXPIRE);
+		}
 
 		return xcache_set($this->sanitize_id($id), $data, $lifetime);
 	}
