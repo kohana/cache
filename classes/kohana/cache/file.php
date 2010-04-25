@@ -10,16 +10,142 @@
  */
 class Kohana_Cache_File extends Cache {
 
+	// Default cache directory
+	const CACHE_DIR = APPPATH.'/cache/.kohana_file_cache';
+
+	/**
+	 * Creates a hashed filename based on the string
+	 *
+	 * @param   string   string to hash into filename
+	 * @return  string
+	 */
+	protected static function filename($string)
+	{
+		return sha1($string).'.txt';
+	}
+
+	/**
+	 * Resolves the cache directory location
+	 *
+	 * @param   string   filename to resolve
+	 * @return  string
+	 */
+	protected static function resolve_directory($filename)
+	{
+		return $this->_cache_dir->getRealPath().DIRECTORY_SEPARATOR.$filename[0].$filename[1].DIRECTORY_SEPARATOR;
+	}
+
+	/**
+	 * The cache directory
+	 *
+	 * @var  string   the caching directory
+	 */
+	protected $_cache_dir;
+
+	/**
+	 * Constructs the file cache driver
+	 *
+	 * @param   array    config 
+	 * @throws  Kohana_Cache_Exception
+	 */
+	protected function __construct(array $config)
+	{
+		$this->_cache_dir = new DirectoryIterator(Arr::get($config, 'cache_dir', Cache_File::CACHE_DIR));
+
+		// If the defined directory is a file, get outta here
+		if ($this->_cache_dir->isFile())
+		{
+			throw new Kohana_Cache_Exception('Unable to create cache directory as a already file exists : :resource', array(':resource' => $this->_cache_dir->getRealPath()));
+		}
+
+		// If the defined directory does not exist, create it
+		if ( ! $this->_cache_dir->isDir())
+		{
+			if ( ! mkdir($this->_cache_dir->getRealPath(), 0777, TRUE))
+			{
+				throw new Kohana_Cache_Exception('Failed to create the defined cache directory : :resource', array(':resource' => $this->_cache_dir->getRealPath()));
+			}
+
+			// Manage unmask issues
+			chmod($this->_cache_dir->getRealPath(), 0777);
+		}
+
+		// Check the read status of the directory
+		if ( ! $this->_cache_dir->isReadable())
+		{
+			throw new Kohana_Cache_Exception('Unable to read from the cache directory :resource', array(':resource' => $this->_cache_dir->getRealPath());
+		}
+
+		// Check the write status of the directory
+		if ( ! $this->_cache_dir->isWritable())
+		{
+			throw new Kohana_Cache_Exception('Unable to write to the cache directory :resource', array(':resource' => $this->_cache_dir->getRealPath());
+		}
+	}
+
 	/**
 	 * Retrieve a value based on an id
 	 *
 	 * @param   string   id 
 	 * @param   string   default [Optional] Default value to return if id not found
 	 * @return  mixed
+	 * @throws  Kohana_Cache_Exception|ErrorException
 	 */
 	public function get($id, $default = NULL)
 	{
-		return (($data = Kohana::cache($this->sanitize_id($id))) === FALSE) ? $default : $data;
+		$filename = Cache_File::filename($this->sanitize_id($id));
+		$directory = Cache_File::resolve_directory($filename);
+
+		// Wrap operations in try/catch to handle notices
+		try
+		{
+			// Open file
+			$file = new SplFileInfo($directory.$filename);
+
+			// If file does not exist
+			if ( ! $file->isFile())
+			{
+				// Return default value
+				return $default;
+			}
+			else
+			{
+				// If the cache entry has expired
+				if ($file->getMTime() < (time() - Arr::get($this->_config, 'default_expire', Cache::DEFAULT_EXPIRE)))
+				{
+					// Delete the file
+					try
+					{
+						unlink($file->getRealPath());
+					}
+					catch (Exception $e)
+					{
+						// File has already been removed
+						return $default;
+					}
+
+					// Return default value
+					return $default;
+				}
+				else
+				{
+					// Return unserialized object
+					return unserialize(file_get_contents($file->getRealPath()));
+				}
+			}
+			
+		}
+		catch (ErrorException $e)
+		{
+			// Handle ErrorException caused by failed unserialization
+			if ($e->getCode() === E_NOTICE)
+			{
+				throw new Kohana_Cache_Exception(__METHOD__.' failed to unserialize cached object with message : '.$e->getMessage());
+			}
+
+			// Otherwise throw the exception
+			throw $e;
+		}
 	}
 
 	/**
@@ -29,13 +155,65 @@ class Kohana_Cache_File extends Cache {
 	 * @param   string   data 
 	 * @param   integer  lifetime [Optional]
 	 * @return  boolean
+	 * @throws  Kohana_Cache_Exception|ErrorException
 	 */
 	public function set($id, $data, $lifetime = NULL)
 	{
-		if (NULL === $lifetime)
-			$lifetime = $this->_default_expire;
+		$filename = Cache_File::filename($this->sanitize_id($id));
+		$directory = Cache_File::resolve_directory($filename);
 
-		return Kohana::cache($this->sanitize_id($id), $data, $lifetime);
+		// Open directory
+		$dir = new SplFileInfo($directory);
+
+		// If the directory path is not a directory
+		if ( ! $dir->isDir())
+		{
+			// Create the directory 
+			if ( ! mkdir($directory, 0777, TRUE))
+			{
+				throw new Kohana_Cache_Exception(__METHOD__.' unable to create directory : :directory', array(':directory' => $directory));
+			}
+
+			// chmod to solve potential umask issues
+			chmod($directory, 0777);
+		}
+
+		// Open file to inspect
+		$file = new SplFileInfo($directory.$filename);
+
+		// If it is a directory or not writable
+		if ( ! $file->isWritable())
+		{
+			// Throw an exception
+			throw new Kohana_Cache_Exception(__METHOD__.' unable to set data to cache. Either the resource is a directory or the file is not writable : :file', array(':file' => $file->getRealPath()));
+		}
+
+		try
+		{
+			// Serialize the data
+			$data = serialize($data);
+		}
+		catch (ErrorException $e)
+		{
+			// If serialize through an error exception
+			if ($e->getCode() === E_NOTICE)
+			{
+				// Throw a caching error
+				throw new Kohana_Cache_Exception(__METHOD__.' failed to serialize data for caching with message : '.$e->getMessage());
+			}
+
+			// Else rethrow the error exception
+			throw $e;
+		}
+
+		try
+		{
+			return (bool) file_put_contents($file->getRealPath(), $data);
+		}
+		catch (Exception $e)
+		{
+			throw $e;
+		}
 	}
 
 	/**
@@ -43,11 +221,28 @@ class Kohana_Cache_File extends Cache {
 	 *
 	 * @param   string   id 
 	 * @param   integer  timeout [Optional]
-	 * @return  boolean
+	 * @return  void|boolean
 	 */
 	public function delete($id)
 	{
-		return unlink($this->filename($this->sanitize_id($id)));
+		$filename = Cache::filename($this->sanitize_id($id));
+		$directory = Cache::resolve_directory($filename);
+
+		$cache_entry = new SplFileInfo($directory.$filename);
+
+		if ( ! $cache_entry->isFile())
+		{
+			return NULL;
+		}
+
+		try
+		{
+			return unlink($cache_entry->getRealPath());
+		}
+		catch (Exception $e)
+		{
+			return NULL;
+		}
 	}
 
 	/**
@@ -57,58 +252,101 @@ class Kohana_Cache_File extends Cache {
 	 */
 	public function delete_all()
 	{
-		return $this->delete_file(Kohana::$cache_dir, TRUE);
-	}
+		while ($this->_cache_dir->valid())
+		{
+			$this->_delete_file($this->_cache_dir, TRUE, TRUE);
+			$this->_cache_dir->next();
+		}
 
-	/**
-	 * Create filename based on id string, just in case core changes
-	 *
-	 * @param	string	$id
-	 * @return	string
-	 */
-	private function filename($id)
-	{
-		return sha1($id).'.txt';
+		return TRUE;
 	}
 
 	/**
 	 * Deletes files recursively and returns FALSE on any errors
 	 *
-	 * @param	string	$str
-	 * @param	bool	$status
-	 * @return	bool
+	 * @param   SplFileInfo  file
+	 * @param   boolean  retain the parent directory
+	 * @param   boolean  ignore_errors to prevent all exceptions interrupting exec
+	 * @return  boolean
+	 * @throws  Kohana_Cache_Exception
 	 */
-	private function delete_file($str, $status)
+	protected function _delete_file(SplFileInfo $file, $retain_directory = FALSE, $ignore_errors = FALSE)
 	{
-		// set current to true
-		$current = TRUE;
-
-		// if str is a file
-		if (is_file($str))
+		// Allow graceful error handling
+		try
 		{
-			$current = @unlink($str);
-		}
-		elseif (is_dir($str))
-		{
-			$files = new DirectoryIterator($str);
-			// iterate over files in a directory
-			while ($files->valid())
+			// If the file isn't writable or is a symbolic link
+			if ( ! $this->isWritable() or $this->isLink())
 			{
-				$name = trim($files->getFilename());
-				// make sure file is valid
-				if (($name != '.') && ($name != '..'))
-					$this->delete_file($files->getPathname(), $status);
-				// next file
-				$files->next();
+				// return
+				return FALSE;
 			}
-			// make sure we are not deleting main cache dir
-			if ($str != Kohana::$cache_dir)
-				$current = @rmdir($str);
-			// unset directory
-			unset($files);
-		}
+			// If the file is self or parent reference
+			else if ($file->isDot())
+			{
+				// return
+				return TRUE;
+			}
+			// If is a file
+			else if ($file->isFile())
+			{
+				// Try to delete the file
+				try
+				{
+					return unlink($file->getRealPath())
+				}
+				catch (ErrorException $e)
+				{
+					// Return gracefully if cannot delete normally
+					if ($e->getCode() === E_WARNING)
+					{
+						throw new Kohana_Cache_Exception(__METHOD__.' unable to remove file : :file', array(':file' => $file->getRealPath()));
+					}
+					throw $e;
+				}
+			}
+			// If is directory
+			else if ($file->isDir())
+			{
+				// Loop over the directory
+				while ($file->valid())
+				{
+					// Remove each file and move pointer on
+					$this->_delete_file($file->current());
+					$file->next();
+				}
 
-		// determine if any errors have occurred while deleting
-		return (($current === TRUE) AND ($status === TRUE)) ? TRUE : FALSE;
+				// If retain directory, return without deleting
+				if ($retain_directory)
+				{
+					return TRUE;
+				}
+
+				// Try to remove folder
+				try
+				{
+					return rmdir($file->getRealPath())
+				}
+				catch (ErrorException $e)
+				{
+					// Return gracefully if cannot delete normally
+					if ($e->getCode() === E_WARNING)
+					{
+						throw new Kohana_Cache_Exception(__METHOD__.' unable to remove directory : :directory', array(':directory' => $file->getRealPath()));
+					}
+
+					throw $e;
+				}
+			}
+		}
+		catch (Exception $e)
+		{
+			if ($ignore_errors === TRUE)
+			{
+				return FALSE;
+			}
+
+			throw $e;
+		}
 	}
 }

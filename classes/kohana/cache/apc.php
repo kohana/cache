@@ -15,9 +15,10 @@ class Kohana_Cache_Apc extends Cache {
 	/**
 	 * Check for existence of the APC extension
 	 *
+	 * @param  array     configuration
 	 * @throws  Kohana_Cache_Exception
 	 */
-	protected function __construct($config)
+	protected function __construct(array $config)
 	{
 		if ( ! extension_loaded('apc'))
 		{

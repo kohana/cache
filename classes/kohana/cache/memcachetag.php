@@ -18,9 +18,10 @@ class Kohana_Cache_MemcacheTag extends Cache_Memcache implements Kohana_Cache_Ta
 	/**
 	 * Constructs the memcache object
 	 *
+	 * @param  array     configuration
 	 * @throws  Kohana_Cache_Exception
 	 */
-	protected function __construct($config)
+	protected function __construct(array $config)
 	{
 		if ( ! method_exists($this->_memcache, 'tag_add'))
 		{

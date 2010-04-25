@@ -41,7 +41,7 @@ abstract class Kohana_Cache {
 
 		if (isset(Cache::$instances[$group]))
 		{
-			// Return the current type if initiated already
+			// Return the current group if initiated already
 			return Cache::$instances[$group];
 		}
 
@@ -63,13 +63,23 @@ abstract class Kohana_Cache {
 	protected $_config;
 
 	/**
+	 * Namespace for the object
+	 *
+	 * @var  string
+	 */
+	protected $_namespace;
+
+	/**
 	 * Ensures singleton pattern is observed, loads the default expiry
 	 * 
-	 * @param  Kohana_Config configuration
+	 * @param  array     configuration
 	 */
-	protected function __construct($config)
+	protected function __construct(array $config)
 	{
 		$this->_config = $config;
+
+		// Resolve namespace
+		$this->_namespace = Arr::get($this->_config, 'namespace', FALSE);
 	}
 
 	/**

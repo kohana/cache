@@ -23,9 +23,10 @@ class Kohana_Cache_Sqlite extends Cache implements Kohana_Cache_Tagging {
 	 * Sets up the PDO SQLite table and
 	 * initialises the PDO connection
 	 *
+	 * @param  array     configuration
 	 * @throws  Kohana_Cache_Exception
 	 */
-	protected function __construct($config)
+	protected function __construct(array $config)
 	{
 		parent::__construct($config);
 

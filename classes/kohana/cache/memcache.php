@@ -27,9 +27,10 @@ class Kohana_Cache_Memcache extends Cache {
 	/**
 	 * Constructs the memcache object
 	 *
+	 * @param  array     configuration
 	 * @throws  Kohana_Cache_Exception
 	 */
-	protected function __construct($config)
+	protected function __construct(array $config)
 	{
 		// Check for the memcache extention
 		if ( ! extension_loaded('memcache'))
