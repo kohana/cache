@@ -18,17 +18,21 @@
  * Each driver requires additional unique settings
  * 
  * MEMCACHE
- *  - {bool}          compression     use compression
+ *  [required]
  *  - {array}         servers         an array of available servers
  *    - {string}      host            the hostname of the memcache server
  *    - {int}         port            the port memcache is running on
  *    - {bool}        persistent      maintain a persistent connection
+ *  [optional]
+ *  - {bool}          compression     use compression
  * 
  *  SQLITE
+ *  [required]
  *  - {string}        database        the location of the db
  *  - {string}        schema          the initialisation schema
  * 
  *  FILE
+ *  [optional]
  *  - {string}        cache_dir       the location of the cache directory
  */
 return array
@@ -36,6 +40,8 @@ return array
 	'default'  => array
 	(
 		'driver'             => 'file',
+		'cache_dir'          => 'cache/.kohana_cache',
+		'default_expire'     => 3600,
 	),
 	// 'memcache' => array
 	// (
@@ -52,6 +58,10 @@ return array
 	// 		),
 	// 	),
 	// ),
+	// 'apc'      => array
+	// (
+	// 	'driver'             => 'apc'
+	// )
 	// 'sqlite'   => array
 	// (
 	// 	'driver'             => 'sqlite',
@@ -63,4 +73,9 @@ return array
 	// (
 	// 	'driver'             => 'xcache'
 	// ),
+	// 	'file'    => array
+	// (
+	// 	'driver'             => 'file',
+	// 	'cache_dir'          => 'cache/.kohana_cache',
+	// )
 );
