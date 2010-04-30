@@ -63,13 +63,6 @@ abstract class Kohana_Cache {
 	protected $_config;
 
 	/**
-	 * Namespace for the object
-	 *
-	 * @var  string
-	 */
-	protected $_namespace;
-
-	/**
 	 * Ensures singleton pattern is observed, loads the default expiry
 	 * 
 	 * @param  array     configuration
@@ -77,9 +70,6 @@ abstract class Kohana_Cache {
 	protected function __construct(array $config)
 	{
 		$this->_config = $config;
-
-		// Resolve namespace
-		$this->_namespace = Arr::get($this->_config, 'namespace', FALSE);
 	}
 
 	/**
