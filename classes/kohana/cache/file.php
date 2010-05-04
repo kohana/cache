@@ -10,6 +10,10 @@
  */
 class Kohana_Cache_File extends Cache {
 
+	// !!! NOTICE !!!
+	// THIS CONSTANT IS USED BY THE FILE CACHE CLASS
+	// INTERNALLY. USE THE CONFIGURATION FILE TO
+	// REDEFINE THE CACHE DIRECTORY.
 	const CACHE_DIR = 'cache/.kohana_cache';
 
 	/**
