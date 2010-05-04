@@ -37,7 +37,7 @@ class Kohana_Cache_Apc extends Cache {
 	 */
 	public function get($id, $default = NULL)
 	{
-		return (($data = apc_fetch($this->sanitize_id($id))) === FALSE) ? $default : $data;
+		return (($data = apc_fetch($this->_sanitize_id($id))) === FALSE) ? $default : $data;
 	}
 
 	/**
@@ -55,7 +55,7 @@ class Kohana_Cache_Apc extends Cache {
 			$lifetime = Arr::get($this->_config, 'default_expire', Cache::DEFAULT_EXPIRE);
 		}
 
-		return apc_store($this->sanitize_id($id), $data, $lifetime);
+		return apc_store($this->_sanitize_id($id), $data, $lifetime);
 	}
 
 	/**
@@ -67,7 +67,7 @@ class Kohana_Cache_Apc extends Cache {
 	 */
 	public function delete($id)
 	{
-		return apc_delete($this->sanitize_id($id));
+		return apc_delete($this->_sanitize_id($id));
 	}
 
 	/**

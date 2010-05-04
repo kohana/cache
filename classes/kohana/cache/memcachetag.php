@@ -1,17 +1,13 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /**
- * Kohana Cache Memcached-tags Driver
+ * See [Kohana_Cache_Memcache]
  * 
- * Memcached-tags extension provides native tagging support to
- * memcache.
- * 
- * @see http://code.google.com/p/memcached-tags/
- * 
- * @package    Kohana
- * @category   Cache
- * @author     Kohana Team
- * @copyright  (c) 2009-2010 Kohana Team
- * @license    http://kohanaphp.com/license
+* @package    Kohana
+* @category   Cache
+* @version    2.0
+* @author     Kohana Team
+* @copyright  (c) 2009-2010 Kohana Team
+* @license    http://kohanaphp.com/license
  */
 class Kohana_Cache_MemcacheTag extends Cache_Memcache implements Kohana_Cache_Tagging {
 

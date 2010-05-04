@@ -37,7 +37,7 @@ class Kohana_Cache_Eaccelerator extends Cache {
 	 */
 	public function get($id, $default = NULL)
 	{
-		return (($data = eaccelerator_get($this->sanitize_id($id))) === FALSE) ? $default : $data;
+		return (($data = eaccelerator_get($this->_sanitize_id($id))) === FALSE) ? $default : $data;
 	}
 
 	/**
@@ -55,7 +55,7 @@ class Kohana_Cache_Eaccelerator extends Cache {
 			$lifetime = time() + Arr::get($this->_config, 'default_expire', Cache::DEFAULT_EXPIRE);
 		}
 
-		return eaccelerator_put($this->sanitize_id($id), $data, $lifetime);
+		return eaccelerator_put($this->_sanitize_id($id), $data, $lifetime);
 	}
 
 	/**
@@ -67,7 +67,7 @@ class Kohana_Cache_Eaccelerator extends Cache {
 	 */
 	public function delete($id)
 	{
-		return eaccelerator_rm($this->sanitize_id($id));
+		return eaccelerator_rm($this->_sanitize_id($id));
 	}
 
 	/**

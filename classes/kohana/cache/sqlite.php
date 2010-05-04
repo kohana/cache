@@ -81,7 +81,7 @@ class Kohana_Cache_Sqlite extends Cache implements Kohana_Cache_Tagging {
 		// Try and load the cache based on id
 		try
 		{
-			$statement->execute(array(':id' => $this->sanitize_id($id)));
+			$statement->execute(array(':id' => $this->_sanitize_id($id)));
 		}
 		catch (PDOException $e)
 		{
@@ -146,7 +146,7 @@ class Kohana_Cache_Sqlite extends Cache implements Kohana_Cache_Tagging {
 		// Remove the entry
 		try
 		{
-			$statement->execute(array(':id' => $this->sanitize_id($id)));
+			$statement->execute(array(':id' => $this->_sanitize_id($id)));
 		}
 		catch (PDOException $e)
 		{
@@ -214,7 +214,7 @@ class Kohana_Cache_Sqlite extends Cache implements Kohana_Cache_Tagging {
 		// Try to insert
 		try
 		{
-			$statement->execute(array(':id' => $this->sanitize_id($id), ':cache' => $data, ':expiration' => $lifetime, ':tags' => $tags));
+			$statement->execute(array(':id' => $this->_sanitize_id($id), ':cache' => $data, ':expiration' => $lifetime, ':tags' => $tags));
 		}
 		catch (PDOException $e)
 		{
@@ -303,7 +303,7 @@ class Kohana_Cache_Sqlite extends Cache implements Kohana_Cache_Tagging {
 		$statement = $this->_db->prepare('SELECT id FROM caches WHERE id = :id');
 		try
 		{
-			$statement->execute(array(':id' => $this->sanitize_id($id)));
+			$statement->execute(array(':id' => $this->_sanitize_id($id)));
 		}
 		catch (PDOExeption $e)
 		{

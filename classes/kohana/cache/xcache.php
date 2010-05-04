@@ -38,7 +38,7 @@ class Kohana_Cache_Xcache extends Cache {
 	 */
 	public function get($id, $default = NULL)
 	{
-		return (($data = xcache_get($this->sanitize_id($id))) === FALSE) ? $default : $data;
+		return (($data = xcache_get($this->_sanitize_id($id))) === FALSE) ? $default : $data;
 	}
 
 	/**
@@ -56,7 +56,7 @@ class Kohana_Cache_Xcache extends Cache {
 			$lifetime = Arr::get($this->_config, 'default_expire', Cache::DEFAULT_EXPIRE);
 		}
 
-		return xcache_set($this->sanitize_id($id), $data, $lifetime);
+		return xcache_set($this->_sanitize_id($id), $data, $lifetime);
 	}
 
 	/**
@@ -68,7 +68,7 @@ class Kohana_Cache_Xcache extends Cache {
 	 */
 	public function delete($id)
 	{
-		return xcache_unset($this->sanitize_id($id));
+		return xcache_unset($this->_sanitize_id($id));
 	}
 
 	/**

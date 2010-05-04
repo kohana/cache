@@ -37,21 +37,21 @@ return array
 	(
 		'driver'             => 'file',
 	),
-	// 'memcache' => array
-	// (
-	// 	'driver'             => 'memcache',
-	// 	'default_expire'     => 3600,
-	// 	'compression'        => FALSE,              // Use Zlib compression (can cause issues with integers)
-	// 	'servers'            => array
-	// 	(
-	// 		array
-	// 		(
-	// 			'host'             => 'localhost',  // Memcache Server
-	// 			'port'             => 11211,        // Memcache port number
-	// 			'persistent'       => FALSE,        // Persistent connection
-	// 		),
-	// 	),
-	// ),
+	'memcache' => array
+	(
+		'driver'             => 'memcache',
+		'default_expire'     => 3600,
+		'compression'        => FALSE,              // Use Zlib compression (can cause issues with integers)
+		'servers'            => array
+		(
+			array
+			(
+				'host'             => 'localhost',  // Memcache Server
+				'port'             => 11211,        // Memcache port number
+				'persistent'       => FALSE,        // Persistent connection
+			),
+		),
+	),
 	// 'sqlite'   => array
 	// (
 	// 	'driver'             => 'sqlite',
