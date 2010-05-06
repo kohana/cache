@@ -76,6 +76,8 @@
  */
 abstract class Kohana_Cache {
 
+	const DEFAULT_EXPIRE = 3600;
+
 	/**
 	 * @var   Kohana_Cache instances
 	 */

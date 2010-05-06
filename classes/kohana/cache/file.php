@@ -42,9 +42,11 @@ class Kohana_Cache_File extends Cache {
 	 */
 	protected function __construct(array $config)
 	{
+		parent::__construct($config);
+
 		try
 		{
-			$directory = Arr::get($config, 'cache_dir', APPPATH.Cache_File::CACHE_DIR);
+			$directory = Arr::get($this->_config, 'cache_dir', APPPATH.Cache_File::CACHE_DIR);
 			$this->_cache_dir = new RecursiveDirectoryIterator($directory);
 		}
 		catch (ErrorException $e)

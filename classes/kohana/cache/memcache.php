@@ -206,7 +206,7 @@ class Kohana_Cache_Memcache extends Cache {
 		if ($lifetime > Cache_Memcache::CACHE_CEILING)
 		{
 			// Set the lifetime to maximum cache time
-			$liftime = Cache_Memcache::CACHE_CEILING + time();
+			$lifetime = Cache_Memcache::CACHE_CEILING + time();
 		}
 		// Else if the lifetime is greater than zero
 		elseif ($lifetime > 0)
