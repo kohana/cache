@@ -105,8 +105,14 @@ class Kohana_Cache_File extends Cache {
 			}
 			else
 			{
-				// If the cache entry has expired
-				if ($file->getMTime() < (time() - Arr::get($this->_config, 'default_expire', Cache::DEFAULT_EXPIRE)))
+				// Open the file and extract the json
+				$json = $file->openFile()->current();
+
+				// Decode the json into PHP object
+				$data = json_decode($json);
+
+				// Test the expiry
+				if ($data->expiry < time())
 				{
 					// Delete the file
 					$this->_delete_file($file, NULL, TRUE);
@@ -116,10 +122,7 @@ class Kohana_Cache_File extends Cache {
 				}
 				else
 				{
-					$data = $file->openFile();
-
-					// Return unserialized object (all data should be on first line)
-					return unserialize($data->current());
+					return base64_decode($data->payload);
 				}
 			}
 			
@@ -151,6 +154,13 @@ class Kohana_Cache_File extends Cache {
 		$filename = Cache_File::filename($this->_sanitize_id($id));
 		$directory = $this->_resolve_directory($filename);
 
+		// If lifetime is NULL
+		if ($lifetime === NULL)
+		{
+			// Set to the default expiry
+			$lifetime = Arr::get($this->_config, 'default_expire', Cache::DEFAULT_EXPIRE);
+		}
+
 		// Open directory
 		$dir = new SplFileInfo($directory);
 
@@ -174,7 +184,7 @@ class Kohana_Cache_File extends Cache {
 		try
 		{
 			// Serialize the data
-			$data = serialize($data);
+			$data = json_encode((object) array('payload' => base64_encode($data), 'expiry' => time() + $lifetime));
 			$size = strlen($data);
 		}
 		catch (ErrorException $e)
