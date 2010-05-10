@@ -190,7 +190,7 @@ class Kohana_Cache_File extends Cache {
 				'payload'  => ($type === 'string') ? $data : serialize($data),
 				'expiry'   => time() + $lifetime,
 				'type'     => $type
-			);
+			));
 
 			$size = strlen($data);
 		}
