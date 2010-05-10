@@ -122,7 +122,7 @@ class Kohana_Cache_File extends Cache {
 				}
 				else
 				{
-					return base64_decode($data->payload);
+					return ($data->type === 'string') ? $data->payload : unserialize($data->payload);
 				}
 			}
 			
@@ -183,8 +183,15 @@ class Kohana_Cache_File extends Cache {
 
 		try
 		{
+			$type = gettype($data);
+
 			// Serialize the data
-			$data = json_encode((object) array('payload' => base64_encode($data), 'expiry' => time() + $lifetime));
+			$data = json_encode((object) array(
+				'payload'  => ($type === 'string') ? $data : serialize($data),
+				'expiry'   => time() + $lifetime,
+				'type'     => $type
+			);
+
 			$size = strlen($data);
 		}
 		catch (ErrorException $e)
