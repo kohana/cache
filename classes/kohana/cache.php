@@ -11,7 +11,7 @@
  * *  File
  * *  [Memcache](http://memcached.org/)
  * *  [Memcached-tags](http://code.google.com/p/memcached-tags/)
- * *  [SQLite](http://xcache.lighttpd.net/)
+ * *  [SQLite](http://www.sqlite.org/)
  * *  [Xcache](http://xcache.lighttpd.net/)
  * 
  * ### Introduction to caching

@@ -1,8 +1,34 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /**
- * Kohana Cache APC Driver
+ * [Kohana Cache](api/Kohana_Cache) APC driver. Provides an opcode based
+ * driver for the Kohana Cache library.
  * 
- * Requires PHP-APC
+ * ### Configuration example
+ * 
+ * Below is an example of an _apc_ server configuration.
+ * 
+ *     return array(
+ *          'apc' => array(                          // Driver group
+ *                  'driver'         => 'apc',         // using APC driver
+ *           ),
+ *     )
+ * 
+ * In cases where only one cache group is required, if the group is named `default` there is
+ * no need to pass the group name when instantiating a cache instance.
+ * 
+ * #### General cache group configuration settings
+ * 
+ * Below are the settings available to all types of cache driver.
+ * 
+ * Name           | Required | Description
+ * -------------- | -------- | ---------------------------------------------------------------
+ * driver         | __YES__  | (_string_) The driver type to use
+ * 
+ * ### System requirements
+ * 
+ * *  Kohana 3.0.x
+ * *  PHP 5.2.4 or greater
+ * *  APC PHP extension
  * 
  * @package    Kohana
  * @category   Cache
@@ -13,10 +39,11 @@
 class Kohana_Cache_Apc extends Cache {
 
 	/**
-	 * Check for existence of the APC extension
+	 * Check for existence of the APC extension This method cannot be invoked externally. The driver must
+	 * be instantiated using the `Cache::instance()` method.
 	 *
 	 * @param  array     configuration
-	 * @throws  Kohana_Cache_Exception
+	 * @throws Kohana_Cache_Exception
 	 */
 	protected function __construct(array $config)
 	{
@@ -29,11 +56,18 @@ class Kohana_Cache_Apc extends Cache {
 	}
 
 	/**
-	 * Retrieve a value based on an id
+	 * Retrieve a cached value entry by id.
+	 * 
+	 *     // Retrieve cache entry from apc group
+	 *     $data = Cache::instance('apc')->get('foo');
+	 * 
+	 *     // Retrieve cache entry from apc group and return 'bar' if miss
+	 *     $data = Cache::instance('apc')->get('foo', 'bar');
 	 *
-	 * @param   string   id 
-	 * @param   string   default [Optional] Default value to return if id not found
+	 * @param   string   id of cache to entry
+	 * @param   string   default value to return if cache miss
 	 * @return  mixed
+	 * @throws  Kohana_Cache_Exception
 	 */
 	public function get($id, $default = NULL)
 	{
@@ -41,11 +75,19 @@ class Kohana_Cache_Apc extends Cache {
 	}
 
 	/**
-	 * Set a value based on an id. Optionally add tags.
+	 * Set a value to cache with id and lifetime
 	 * 
-	 * @param   string   id 
-	 * @param   string   data 
-	 * @param   integer  lifetime [Optional]
+	 *     $data = 'bar';
+	 * 
+	 *     // Set 'bar' to 'foo' in apc group, using default expiry
+	 *     Cache::instance('apc')->set('foo', $data);
+	 * 
+	 *     // Set 'bar' to 'foo' in apc group for 30 seconds
+	 *     Cache::instance('apc')->set('foo', $data, 30);
+	 *
+	 * @param   string   id of cache entry
+	 * @param   string   data to set to cache
+	 * @param   integer  lifetime in seconds
 	 * @return  boolean
 	 */
 	public function set($id, $data, $lifetime = NULL)
@@ -60,9 +102,11 @@ class Kohana_Cache_Apc extends Cache {
 
 	/**
 	 * Delete a cache entry based on id
+	 * 
+	 *     // Delete 'foo' entry from the apc group
+	 *     Cache::instance('apc')->delete('foo');
 	 *
-	 * @param   string   id 
-	 * @param   integer  timeout [Optional]
+	 * @param   string   id to remove from cache
 	 * @return  boolean
 	 */
 	public function delete($id)
@@ -71,7 +115,14 @@ class Kohana_Cache_Apc extends Cache {
 	}
 
 	/**
-	 * Delete all cache entries
+	 * Delete all cache entries.
+	 * 
+	 * Beware of using this method when
+	 * using shared memory cache systems, as it will wipe every
+	 * entry within the system for all clients.
+	 * 
+	 *     // Delete all cache entries in the apc group
+	 *     Cache::instance('apc')->delete_all();
 	 *
 	 * @return  boolean
 	 */
