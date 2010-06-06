@@ -79,6 +79,11 @@ abstract class Kohana_Cache {
 	const DEFAULT_EXPIRE = 3600;
 
 	/**
+	 * @var   string     default driver to use
+	 */
+	public static $default = 'file';
+
+	/**
 	 * @var   Kohana_Cache instances
 	 */
 	public static $instances = array();
@@ -100,8 +105,15 @@ abstract class Kohana_Cache {
 	 * @return  Kohana_Cache
 	 * @throws  Kohana_Cache_Exception
 	 */
-	public static function instance($group = 'default')
+	public static function instance($group = NULL)
 	{
+		// If there is no group supplied
+		if ($group === NULL)
+		{
+			// Use the default setting
+			$group = Cache::$default;
+		}
+
 		if (isset(Cache::$instances[$group]))
 		{
 			// Return the current group if initiated already
