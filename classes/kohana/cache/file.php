@@ -366,6 +366,10 @@ class Kohana_Cache_File extends Cache {
 
 				try
 				{
+					// Remove the files iterator
+					// (fixes Windows PHP which has permission issues with open iterators)
+					unset($files);
+
 					// Try to remove the parent directory
 					return rmdir($file->getRealPath());
 				}
