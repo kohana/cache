@@ -38,7 +38,7 @@ class Kohana_Cache_Xcache extends Cache {
 	 */
 	public function get($id, $default = NULL)
 	{
-		return (($data = xcache_get($this->_sanitize_id($id))) === FALSE) ? $default : $data;
+		return (($data = xcache_get($this->_sanitize_id($id))) === NULL) ? $default : $data;
 	}
 
 	/**
