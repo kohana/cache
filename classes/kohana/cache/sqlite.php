@@ -10,7 +10,7 @@
  * @copyright  (c) 2009-2010 Kohana Team
  * @license    http://kohanaphp.com/license
  */
-class Kohana_Cache_Sqlite extends Cache implements Kohana_Cache_Tagging {
+class Kohana_Cache_Sqlite extends Cache implements Kohana_Cache_Tagging, Kohana_Cache_GarbageCollect {
 
 	/**
 	 * Database resource
@@ -289,6 +289,27 @@ class Kohana_Cache_Sqlite extends Cache implements Kohana_Cache_Tagging {
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Garbage collection method that cleans any expired
+	 * cache entries from the cache.
+	 *
+	 * @return  void
+	 */
+	public function garbage_collect()
+	{
+		// Create the sequel statement
+		$statement = $this->_db->prepare('DELETE FROM caches WHERE expiration < :expiration');
+
+		try
+		{
+			$statement->execute(array(':expiration' => time()));
+		}
+		catch (PDOException $e)
+		{
+			throw new Kohana_Cache_Exception('There was a problem querying the local SQLite3 cache. :error', array(':error' => $e->getMessage()));
+		}
 	}
 
 	/**

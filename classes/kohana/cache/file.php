@@ -38,7 +38,7 @@
  * @copyright  (c) 2009-2010 Kohana Team
  * @license    http://kohanaphp.com/license
  */
-class Kohana_Cache_File extends Cache {
+class Kohana_Cache_File extends Cache implements Kohana_Cache_GarbageCollect {
 
 	// !!! NOTICE !!!
 	// THIS CONSTANT IS USED BY THE FILE CACHE CLASS
@@ -58,7 +58,7 @@ class Kohana_Cache_File extends Cache {
 	 */
 	protected static function filename($string)
 	{
-		return sha1($string).'.txt';
+		return sha1($string).'.json';
 	}
 
 	/**
@@ -96,7 +96,7 @@ class Kohana_Cache_File extends Cache {
 		// If the defined directory is a file, get outta here
 		if ($this->_cache_dir->isFile())
 		{
-			throw new Kohana_Cache_Exception('Unable to create cache directory as a already file exists : :resource', array(':resource' => $this->_cache_dir->getRealPath()));
+			throw new Kohana_Cache_Exception('Unable to create cache directory as a file already exists : :resource', array(':resource' => $this->_cache_dir->getRealPath()));
 		}
 
 		// Check the read status of the directory
@@ -300,6 +300,18 @@ class Kohana_Cache_File extends Cache {
 	}
 
 	/**
+	 * Garbage collection method that cleans any expired
+	 * cache entries from the cache.
+	 *
+	 * @return  void
+	 */
+	public function garbage_collect()
+	{
+		$this->_delete_file($this->_cache_dir, TRUE, FALSE, TRUE);
+		return;
+	}
+
+	/**
 	 * Deletes files recursively and returns FALSE on any errors
 	 * 
 	 *     // Delete a file or folder whilst retaining parent directory and ignore all errors
@@ -308,10 +320,11 @@ class Kohana_Cache_File extends Cache {
 	 * @param   SplFileInfo  file
 	 * @param   boolean  retain the parent directory
 	 * @param   boolean  ignore_errors to prevent all exceptions interrupting exec
+	 * @param   boolean  only expired files
 	 * @return  boolean
 	 * @throws  Kohana_Cache_Exception
 	 */
-	protected function _delete_file(SplFileInfo $file, $retain_parent_directory = FALSE, $ignore_errors = FALSE)
+	protected function _delete_file(SplFileInfo $file, $retain_parent_directory = FALSE, $ignore_errors = FALSE, $only_expired = FALSE)
 	{
 		// Allow graceful error handling
 		try
@@ -321,8 +334,27 @@ class Kohana_Cache_File extends Cache {
 			{
 				try
 				{
-					// Try to delete
-					unlink($file->getRealPath());
+					// If only expired is not set
+					if ($only_expired === FALSE)
+					{
+						// We want to delete the file
+						$delete = TRUE;
+					}
+					// Otherwise...
+					else
+					{
+						// Assess the file expiry to flag it for deletion
+						$json = $file->openFile('r')->current();
+						$data = json_decode($json);
+						$delete = $data->expiry < time();
+					}
+
+					// If the delete flag is set
+					if ($delete === TRUE)
+					{
+						// Try to delete
+						unlink($file->getRealPath());
+					}
 				}
 				catch (ErrorException $e)
 				{

@@ -3,7 +3,13 @@
 Kohana Cache uses configuration groups to create cache instances. A configuration group can
 use any supported driver, with successive groups using multiple instances of the same driver type.
 
-In cases where only one cache group is required, if the group is named `default` there is no need to pass the group name when instantiating a cache instance.
+The default cache group is loaded based on the `Cache::$default` setting. It is set to the `file` driver as standard, however this can be changed within the `/application/boostrap.php` file.
+
+     // Change the default cache driver to memcache
+     Cache::$default = 'memcache';
+
+     // Load the memcache cache driver using default setting
+     $memcache = Cache::instance();
 
 ## Group settings
 
@@ -16,7 +22,7 @@ driver         | __YES__  | (_string_) The driver type to use
 default_expire | __NO__   | (_string_) The driver type to use
 
 
-	'default'  => array
+	'file'  => array
 	(
 		'driver'             => 'file',
 		'cache_dir'          => APPPATH.'cache/.kohana_cache',
@@ -59,7 +65,6 @@ failure_callback | __NO__   | (_[callback](http://www.php.net/manual/en/language
 				'persistent'       => FALSE,        // Persistent connection
 			),
 		),
-		'default_expire'     => 3600,
 	),
 	'memcachetag' => array
 	(
@@ -76,7 +81,6 @@ failure_callback | __NO__   | (_[callback](http://www.php.net/manual/en/language
 				'persistent'       => FALSE,        // Persistent connection
 			),
 		),
-		'default_expire'     => 3600,
 	),
 
 ## APC settings
@@ -96,7 +100,6 @@ failure_callback | __NO__   | (_[callback](http://www.php.net/manual/en/language
 		'database'           => APPPATH.'cache/kohana-cache.sql3',
 		'schema'             => 'CREATE TABLE caches(id VARCHAR(127) PRIMARY KEY, 
 		                                  tags VARCHAR(255), expiration INTEGER, cache TEXT)',
-		'default_expire'     => 3600,
 	),
 
 ## Eaccelerator settings
@@ -131,7 +134,7 @@ The following example demonstrates how to override an existing configuration set
 	return array
 	(
 		// Override the default configuration
-		'default'   => array
+		'memcache'   => array
 		(
 			'driver'         => 'memcache',  // Use Memcached as the default driver
 			'default_expire' => 8000,        // Overide default expiry
