@@ -83,7 +83,7 @@ class Kohana_Cache_File extends Cache {
 			$directory = Arr::get($this->_config, 'cache_dir', APPPATH.Cache_File::CACHE_DIR);
 			$this->_cache_dir = new RecursiveDirectoryIterator($directory);
 		}
-		catch (UnexpectedValueException $e)
+		catch (Exception $e)
 		{
 			if ( ! mkdir($directory, 0777, TRUE))
 			{
