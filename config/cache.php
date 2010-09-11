@@ -15,7 +15,6 @@ return array
 				'persistent'       => FALSE,        // Persistent connection
 			),
 		),
-		'default_expire'     => 3600,
 	),
 	'memcachetag' => array
 	(
@@ -31,7 +30,6 @@ return array
 				'persistent'       => FALSE,        // Persistent connection
 			),
 		),
-		'default_expire'     => 3600,
 	),
 	'apc'      => array
 	(
@@ -44,7 +42,6 @@ return array
 		'default_expire'     => 3600,
 		'database'           => APPPATH.'cache/kohana-cache.sql3',
 		'schema'             => 'CREATE TABLE caches(id VARCHAR(127) PRIMARY KEY, tags VARCHAR(255), expiration INTEGER, cache TEXT)',
-		'default_expire'     => 3600,
 	),
 	'eaccelerator'           => array
 	(
