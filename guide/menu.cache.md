@@ -1,5 +1,4 @@
-1. **Kohana Cache**
+1. **Cache**
    - [About](cache.about)
    - [Configuration](cache.config)
    - [Usage](cache.usage)
-   - [Examples](cache.examples)
