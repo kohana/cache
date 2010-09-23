@@ -72,8 +72,8 @@
  * *  Memcache (plus Memcached-tags for native tagging support)
  * *  Zlib
  * 
- * @package    Kohana
- * @category   Cache
+ * @package    Kohana/Cache
+ * @category   Base
  * @version    2.0
  * @author     Kohana Team
  * @copyright  (c) 2009-2010 Kohana Team
