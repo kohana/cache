@@ -138,7 +138,7 @@ class Kohana_Cache_File extends Cache implements Kohana_Cache_GarbageCollect {
 			$file = new SplFileInfo($directory.$filename);
 
 			// If file does not exist
-			if ( ! $file->getRealPath())
+			if ( ! $file->isFile())
 			{
 				// Return default value
 				return $default;
