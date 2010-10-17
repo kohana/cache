@@ -135,7 +135,7 @@ class Kohana_Cache_Memcache extends Cache {
 			'timeout'          => 1,
 			'retry_interval'   => 15,
 			'status'           => TRUE,
-			'failure_callback' => array($this, '_failed_request'),
+			'failure_callback' => array($this, 'failed_request'),
 		);
 
 		// Add the memcache servers to the pool
@@ -276,7 +276,7 @@ class Kohana_Cache_Memcache extends Cache {
 	 * @return  void|boolean
 	 * @since   3.0.8
 	 */
-	protected function _failed_request($hostname, $port)
+	public function failed_request($hostname, $port)
 	{
 		if ( ! $this->_config['instant_death'])
 			return; 
