@@ -81,7 +81,7 @@ class Kohana_Cache_File extends Cache implements Kohana_Cache_GarbageCollect {
 		try
 		{
 			$directory = Arr::get($this->_config, 'cache_dir', APPPATH.Cache_File::CACHE_DIR);
-			$this->_cache_dir = new RecursiveDirectoryIterator($directory);
+			$this->_cache_dir = new SplFileInfo($directory);
 		}
 		catch (UnexpectedValueException $e)
 		{
@@ -90,7 +90,7 @@ class Kohana_Cache_File extends Cache implements Kohana_Cache_GarbageCollect {
 				throw new Kohana_Cache_Exception('Failed to create the defined cache directory : :directory', array(':directory' => $directory));
 			}
 			chmod($directory, 0777);
-			$this->_cache_dir = new RecursiveDirectoryIterator($directory);
+			$this->_cache_dir = new SplFileInfo($directory);
 		}
 
 		// If the defined directory is a file, get outta here
