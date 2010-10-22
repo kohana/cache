@@ -14,7 +14,7 @@ return array(
 			'name' => 'Cache',
 
 			// A short description of this module, shown on the index page
-			'description' => 'Official Cache Module.',
+			'description' => 'Common interface for caching engines.',
 			
 			// Copyright message, shown in the footer for this module
 			'copyright' => '&copy; 2008–2010 Kohana Team',
