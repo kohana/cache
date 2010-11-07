@@ -14,6 +14,7 @@ class KohanaCacheTest extends PHPUnit_Framework_TestCase {
 
 	public function tearDown()
 	{
+		self::$test_instance->delete_all();
 		self::$test_instance = NULL;
 	}
 
@@ -76,5 +77,15 @@ class KohanaCacheTest extends PHPUnit_Framework_TestCase {
 
 		// Test the property has expired
 		$this->assertNull(self::$test_instance->get('testSet2'));
+	}
+
+	public function testDelete()
+	{
+		
+	}
+
+	public function testDeleteAll()
+	{
+		
 	}
 }
