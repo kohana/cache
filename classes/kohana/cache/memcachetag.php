@@ -11,7 +11,7 @@
  */
 class Kohana_Cache_MemcacheTag extends Cache_Memcache implements Kohana_Cache_Tagging {
 
-	/**
+	/** 
 	 * Constructs the memcache object
 	 *
 	 * @param  array     configuration
