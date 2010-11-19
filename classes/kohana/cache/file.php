@@ -40,12 +40,6 @@
  */
 class Kohana_Cache_File extends Cache implements Kohana_Cache_GarbageCollect {
 
-	// !!! NOTICE !!!
-	// THIS CONSTANT IS USED BY THE FILE CACHE CLASS
-	// INTERNALLY. USE THE CONFIGURATION FILE TO
-	// REDEFINE THE CACHE DIRECTORY.
-	const CACHE_DIR = 'cache/.kohana_cache';
-
 	/**
 	 * Creates a hashed filename based on the string. This is used
 	 * to create shorter unique IDs for each cache filename.
@@ -80,7 +74,7 @@ class Kohana_Cache_File extends Cache implements Kohana_Cache_GarbageCollect {
 
 		try
 		{
-			$directory = Arr::get($this->_config, 'cache_dir', APPPATH.Cache_File::CACHE_DIR);
+			$directory = Arr::get($this->_config, 'cache_dir', Kohana::$cache_dir);
 			$this->_cache_dir = new RecursiveDirectoryIterator($directory);
 		}
 		catch (UnexpectedValueException $e)
