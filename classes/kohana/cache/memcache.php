@@ -135,6 +135,7 @@ class Kohana_Cache_Memcache extends Cache {
 			'timeout'          => 1,
 			'retry_interval'   => 15,
 			'status'           => TRUE,
+			'instant_death'    => TRUE,
 			'failure_callback' => array($this, '_failed_request'),
 		);
 
