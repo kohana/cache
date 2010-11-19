@@ -44,7 +44,7 @@
 class Kohana_Cache_Wincache extends Cache {
 
 	/**
-	 * Check for existence of the APC extension This method cannot be invoked externally. The driver must
+	 * Check for existence of the wincache extension This method cannot be invoked externally. The driver must
 	 * be instantiated using the `Cache::instance()` method.
 	 *
 	 * @param  array     configuration
@@ -54,7 +54,7 @@ class Kohana_Cache_Wincache extends Cache {
 	{
 		if ( ! extension_loaded('wincache'))
 		{
-			throw new Kohana_Cache_Exception('PHP APC extension is not available.');
+			throw new Kohana_Cache_Exception('PHP wincache extension is not available.');
 		}
 
 		parent::__construct($config);
