@@ -44,7 +44,7 @@
 class Kohana_Cache_Wincache extends Cache {
 
 	/**
-	 * Check for existence of the APC extension This method cannot be invoked externally. The driver must
+	 * Check for existence of the wincache extension This method cannot be invoked externally. The driver must
 	 * be instantiated using the `Cache::instance()` method.
 	 *
 	 * @param  array     configuration
@@ -54,7 +54,7 @@ class Kohana_Cache_Wincache extends Cache {
 	{
 		if ( ! extension_loaded('wincache'))
 		{
-			throw new Kohana_Cache_Exception('PHP APC extension is not available.');
+			throw new Kohana_Cache_Exception('PHP wincache extension is not available.');
 		}
 
 		parent::__construct($config);
@@ -63,11 +63,11 @@ class Kohana_Cache_Wincache extends Cache {
 	/**
 	 * Retrieve a cached value entry by id.
 	 * 
-	 *     // Retrieve cache entry from apc group
-	 *     $data = Cache::instance('apc')->get('foo');
+	 *     // Retrieve cache entry from wincache group
+	 *     $data = Cache::instance('wincache')->get('foo');
 	 * 
-	 *     // Retrieve cache entry from apc group and return 'bar' if miss
-	 *     $data = Cache::instance('apc')->get('foo', 'bar');
+	 *     // Retrieve cache entry from wincache group and return 'bar' if miss
+	 *     $data = Cache::instance('wincache')->get('foo', 'bar');
 	 *
 	 * @param   string   id of cache to entry
 	 * @param   string   default value to return if cache miss
@@ -86,11 +86,11 @@ class Kohana_Cache_Wincache extends Cache {
 	 * 
 	 *     $data = 'bar';
 	 * 
-	 *     // Set 'bar' to 'foo' in apc group, using default expiry
-	 *     Cache::instance('apc')->set('foo', $data);
+	 *     // Set 'bar' to 'foo' in wincache group, using default expiry
+	 *     Cache::instance('wincache')->set('foo', $data);
 	 * 
-	 *     // Set 'bar' to 'foo' in apc group for 30 seconds
-	 *     Cache::instance('apc')->set('foo', $data, 30);
+	 *     // Set 'bar' to 'foo' in wincache group for 30 seconds
+	 *     Cache::instance('wincache')->set('foo', $data, 30);
 	 *
 	 * @param   string   id of cache entry
 	 * @param   string   data to set to cache
@@ -110,8 +110,8 @@ class Kohana_Cache_Wincache extends Cache {
 	/**
 	 * Delete a cache entry based on id
 	 * 
-	 *     // Delete 'foo' entry from the apc group
-	 *     Cache::instance('apc')->delete('foo');
+	 *     // Delete 'foo' entry from the wincache group
+	 *     Cache::instance('wincache')->delete('foo');
 	 *
 	 * @param   string   id to remove from cache
 	 * @return  boolean
@@ -128,8 +128,8 @@ class Kohana_Cache_Wincache extends Cache {
 	 * using shared memory cache systems, as it will wipe every
 	 * entry within the system for all clients.
 	 * 
-	 *     // Delete all cache entries in the apc group
-	 *     Cache::instance('apc')->delete_all();
+	 *     // Delete all cache entries in the wincache group
+	 *     Cache::instance('wincache')->delete_all();
 	 *
 	 * @return  boolean
 	 */
