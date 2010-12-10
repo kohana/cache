@@ -228,7 +228,7 @@ class Kohana_Cache_File extends Cache implements Kohana_Cache_GarbageCollect {
 			$type = gettype($data);
 
 			// Serialize the data
-			$data = json_encode((object) array(
+			$data = json_encode( (object) array(
 				'payload'  => ($type === 'string') ? $data : serialize($data),
 				'expiry'   => time() + $lifetime,
 				'type'     => $type
@@ -361,7 +361,7 @@ class Kohana_Cache_File extends Cache implements Kohana_Cache_GarbageCollect {
 				}
 			}
 			// Else, is directory
-			else if ($file->isDir())
+			elseif ($file->isDir())
 			{
 				// Create new DirectoryIterator
 				$files = new DirectoryIterator($file->getPathname());
