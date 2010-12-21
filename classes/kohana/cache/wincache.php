@@ -78,7 +78,7 @@ class Kohana_Cache_Wincache extends Cache {
 	{
 		$data = wincache_ucache_get($this->_sanitize_id($id), $success);
 
-		return ($success) ? $data : $default;
+		return $success ? $data : $default;
 	}
 
 	/**
