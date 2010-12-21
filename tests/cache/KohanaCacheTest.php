@@ -27,8 +27,8 @@ class KohanaCacheTest extends PHPUnit_Framework_TestCase {
 		$file_instance2 = Cache::instance('file');
 
 		// Try and load a Cache instance
-		$this->assertType('Kohana_Cache', Cache::instance());
-		$this->assertType('Kohana_Cache_File', $file_instance);
+		$this->assertInstanceOf('Kohana_Cache', Cache::instance());
+		$this->assertInstanceOf('Kohana_Cache_File', $file_instance);
 
 		// Test instances are only initialised once
 		$this->assertTrue(spl_object_hash($file_instance) == spl_object_hash($file_instance2));
