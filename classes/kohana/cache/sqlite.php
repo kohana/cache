@@ -10,7 +10,7 @@
  * @copyright  (c) 2009-2010 Kohana Team
  * @license    http://kohanaphp.com/license
  */
-class Kohana_Cache_Sqlite extends Cache implements Kohana_Cache_Tagging, Kohana_Cache_GarbageCollect {
+class Kohana_Cache_Sqlite extends Cache implements Cache_Tagging, Cache_GarbageCollect {
 
 	/**
 	 * Database resource
@@ -24,7 +24,7 @@ class Kohana_Cache_Sqlite extends Cache implements Kohana_Cache_Tagging, Kohana_
 	 * initialises the PDO connection
 	 *
 	 * @param  array     configuration
-	 * @throws  Kohana_Cache_Exception
+	 * @throws  Cache_Exception
 	 */
 	protected function __construct(array $config)
 	{
@@ -34,7 +34,7 @@ class Kohana_Cache_Sqlite extends Cache implements Kohana_Cache_Tagging, Kohana_
 
 		if ($database === NULL)
 		{
-			throw new Kohana_Cache_Exception('Database path not available in Kohana Cache configuration');
+			throw new Cache_Exception('Database path not available in Kohana Cache configuration');
 		}
 
 		// Load new Sqlite DB
@@ -50,7 +50,7 @@ class Kohana_Cache_Sqlite extends Cache implements Kohana_Cache_Tagging, Kohana_
 
 			if ($database_schema === NULL)
 			{
-				throw new Kohana_Cache_Exception('Database schema not found in Kohana Cache configuration');
+				throw new Cache_Exception('Database schema not found in Kohana Cache configuration');
 			}
 
 			try
@@ -60,7 +60,7 @@ class Kohana_Cache_Sqlite extends Cache implements Kohana_Cache_Tagging, Kohana_
 			}
 			catch (PDOException $e)
 			{
-				throw new Kohana_Cache_Exception('Failed to create new SQLite caches table with the following error : :error', array(':error' => $e->getMessage()));
+				throw new Cache_Exception('Failed to create new SQLite caches table with the following error : :error', array(':error' => $e->getMessage()));
 			}
 		}
 	}
@@ -71,7 +71,7 @@ class Kohana_Cache_Sqlite extends Cache implements Kohana_Cache_Tagging, Kohana_
 	 * @param   string   id 
 	 * @param   string   default [Optional] Default value to return if id not found
 	 * @return  mixed
-	 * @throws  Kohana_Cache_Exception
+	 * @throws  Cache_Exception
 	 */
 	public function get($id, $default = NULL)
 	{
@@ -85,7 +85,7 @@ class Kohana_Cache_Sqlite extends Cache implements Kohana_Cache_Tagging, Kohana_
 		}
 		catch (PDOException $e)
 		{
-			throw new Kohana_Cache_Exception('There was a problem querying the local SQLite3 cache. :error', array(':error' => $e->getMessage()));
+			throw new Cache_Exception('There was a problem querying the local SQLite3 cache. :error', array(':error' => $e->getMessage()));
 		}
 
 		if ( ! $result = $statement->fetch(PDO::FETCH_OBJ))
@@ -136,7 +136,7 @@ class Kohana_Cache_Sqlite extends Cache implements Kohana_Cache_Tagging, Kohana_
 	 * @param   string   id 
 	 * @param   integer  timeout [Optional]
 	 * @return  boolean
-	 * @throws  Kohana_Cache_Exception
+	 * @throws  Cache_Exception
 	 */
 	public function delete($id)
 	{
@@ -150,7 +150,7 @@ class Kohana_Cache_Sqlite extends Cache implements Kohana_Cache_Tagging, Kohana_
 		}
 		catch (PDOException $e)
 		{
-			throw new Kohana_Cache_Exception('There was a problem querying the local SQLite3 cache. :error', array(':error' => $e->getMessage()));
+			throw new Cache_Exception('There was a problem querying the local SQLite3 cache. :error', array(':error' => $e->getMessage()));
 		}
 
 		return (bool) $statement->rowCount();
@@ -187,7 +187,7 @@ class Kohana_Cache_Sqlite extends Cache implements Kohana_Cache_Tagging, Kohana_
 	 * @param   integer  lifetime [Optional]
 	 * @param   array    tags [Optional]
 	 * @return  boolean
-	 * @throws  Kohana_Cache_Exception
+	 * @throws  Cache_Exception
 	 */
 	public function set_with_tags($id, $data, $lifetime = NULL, array $tags = NULL)
 	{
@@ -208,7 +208,7 @@ class Kohana_Cache_Sqlite extends Cache implements Kohana_Cache_Tagging, Kohana_
 		}
 
 		// Prepare statement
-		// $this->exists() may throw Kohana_Cache_Exception, no need to catch/rethrow
+		// $this->exists() may throw Cache_Exception, no need to catch/rethrow
 		$statement = $this->exists($id) ? $this->_db->prepare('UPDATE caches SET expiration = :expiration, cache = :cache, tags = :tags WHERE id = :id') : $this->_db->prepare('INSERT INTO caches (id, cache, expiration, tags) VALUES (:id, :cache, :expiration, :tags)');
 
 		// Try to insert
@@ -218,7 +218,7 @@ class Kohana_Cache_Sqlite extends Cache implements Kohana_Cache_Tagging, Kohana_
 		}
 		catch (PDOException $e)
 		{
-			throw new Kohana_Cache_Exception('There was a problem querying the local SQLite3 cache. :error', array(':error' => $e->getMessage()));
+			throw new Cache_Exception('There was a problem querying the local SQLite3 cache. :error', array(':error' => $e->getMessage()));
 		}
 
 		return (bool) $statement->rowCount();
@@ -230,7 +230,7 @@ class Kohana_Cache_Sqlite extends Cache implements Kohana_Cache_Tagging, Kohana_
 	 * @param   string   tag 
 	 * @param   integer  timeout [Optional]
 	 * @return  boolean
-	 * @throws  Kohana_Cache_Exception
+	 * @throws  Cache_Exception
 	 */
 	public function delete_tag($tag)
 	{
@@ -255,7 +255,7 @@ class Kohana_Cache_Sqlite extends Cache implements Kohana_Cache_Tagging, Kohana_
 	 *
 	 * @param   string   tag 
 	 * @return  array
-	 * @throws  Kohana_Cache_Exception
+	 * @throws  Cache_Exception
 	 */
 	public function find($tag)
 	{
@@ -272,7 +272,7 @@ class Kohana_Cache_Sqlite extends Cache implements Kohana_Cache_Tagging, Kohana_
 		}
 		catch (PDOException $e)
 		{
-			throw new Kohana_Cache_Exception('There was a problem querying the local SQLite3 cache. :error', array(':error' => $e->getMessage()));
+			throw new Cache_Exception('There was a problem querying the local SQLite3 cache. :error', array(':error' => $e->getMessage()));
 		}
 
 		$result = array();
@@ -308,7 +308,7 @@ class Kohana_Cache_Sqlite extends Cache implements Kohana_Cache_Tagging, Kohana_
 		}
 		catch (PDOException $e)
 		{
-			throw new Kohana_Cache_Exception('There was a problem querying the local SQLite3 cache. :error', array(':error' => $e->getMessage()));
+			throw new Cache_Exception('There was a problem querying the local SQLite3 cache. :error', array(':error' => $e->getMessage()));
 		}
 	}
 
@@ -317,7 +317,7 @@ class Kohana_Cache_Sqlite extends Cache implements Kohana_Cache_Tagging, Kohana_
 	 *
 	 * @param   string   id 
 	 * @return  boolean
-	 * @throws  Kohana_Cache_Exception
+	 * @throws  Cache_Exception
 	 */
 	protected function exists($id)
 	{
@@ -328,7 +328,7 @@ class Kohana_Cache_Sqlite extends Cache implements Kohana_Cache_Tagging, Kohana_
 		}
 		catch (PDOExeption $e)
 		{
-			throw new Kohana_Cache_Exception('There was a problem querying the local SQLite3 cache. :error', array(':error' => $e->getMessage()));
+			throw new Cache_Exception('There was a problem querying the local SQLite3 cache. :error', array(':error' => $e->getMessage()));
 		}
 
 		return (bool) $statement->fetchAll();

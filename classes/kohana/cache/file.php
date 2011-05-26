@@ -38,7 +38,7 @@
  * @copyright  (c) 2009-2010 Kohana Team
  * @license    http://kohanaphp.com/license
  */
-class Kohana_Cache_File extends Cache implements Kohana_Cache_GarbageCollect {
+class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
 
 	/**
 	 * Creates a hashed filename based on the string. This is used
@@ -65,7 +65,7 @@ class Kohana_Cache_File extends Cache implements Kohana_Cache_GarbageCollect {
 	 * be instantiated using the `Cache::instance()` method.
 	 *
 	 * @param   array    config 
-	 * @throws  Kohana_Cache_Exception
+	 * @throws  Cache_Exception
 	 */
 	protected function __construct(array $config)
 	{
@@ -91,19 +91,19 @@ class Kohana_Cache_File extends Cache implements Kohana_Cache_GarbageCollect {
 		// If the defined directory is a file, get outta here
 		if ($this->_cache_dir->isFile())
 		{
-			throw new Kohana_Cache_Exception('Unable to create cache directory as a file already exists : :resource', array(':resource' => $this->_cache_dir->getRealPath()));
+			throw new Cache_Exception('Unable to create cache directory as a file already exists : :resource', array(':resource' => $this->_cache_dir->getRealPath()));
 		}
 
 		// Check the read status of the directory
 		if ( ! $this->_cache_dir->isReadable())
 		{
-			throw new Kohana_Cache_Exception('Unable to read from the cache directory :resource', array(':resource' => $this->_cache_dir->getRealPath()));
+			throw new Cache_Exception('Unable to read from the cache directory :resource', array(':resource' => $this->_cache_dir->getRealPath()));
 		}
 
 		// Check the write status of the directory
 		if ( ! $this->_cache_dir->isWritable())
 		{
-			throw new Kohana_Cache_Exception('Unable to write to the cache directory :resource', array(':resource' => $this->_cache_dir->getRealPath()));
+			throw new Cache_Exception('Unable to write to the cache directory :resource', array(':resource' => $this->_cache_dir->getRealPath()));
 		}
 	}
 
@@ -119,7 +119,7 @@ class Kohana_Cache_File extends Cache implements Kohana_Cache_GarbageCollect {
 	 * @param   string   id of cache to entry
 	 * @param   string   default value to return if cache miss
 	 * @return  mixed
-	 * @throws  Kohana_Cache_Exception
+	 * @throws  Cache_Exception
 	 */
 	public function get($id, $default = NULL)
 	{
@@ -167,7 +167,7 @@ class Kohana_Cache_File extends Cache implements Kohana_Cache_GarbageCollect {
 			// Handle ErrorException caused by failed unserialization
 			if ($e->getCode() === E_NOTICE)
 			{
-				throw new Kohana_Cache_Exception(__METHOD__.' failed to unserialize cached object with message : '.$e->getMessage());
+				throw new Cache_Exception(__METHOD__.' failed to unserialize cached object with message : '.$e->getMessage());
 			}
 
 			// Otherwise throw the exception
@@ -212,7 +212,7 @@ class Kohana_Cache_File extends Cache implements Kohana_Cache_GarbageCollect {
 			// Create the directory 
 			if ( ! mkdir($directory, 0777, TRUE))
 			{
-				throw new Kohana_Cache_Exception(__METHOD__.' unable to create directory : :directory', array(':directory' => $directory));
+				throw new Cache_Exception(__METHOD__.' unable to create directory : :directory', array(':directory' => $directory));
 			}
 
 			// chmod to solve potential umask issues
@@ -242,7 +242,7 @@ class Kohana_Cache_File extends Cache implements Kohana_Cache_GarbageCollect {
 			if ($e->getCode() === E_NOTICE)
 			{
 				// Throw a caching error
-				throw new Kohana_Cache_Exception(__METHOD__.' failed to serialize data for caching with message : '.$e->getMessage());
+				throw new Cache_Exception(__METHOD__.' failed to serialize data for caching with message : '.$e->getMessage());
 			}
 
 			// Else rethrow the error exception
@@ -317,7 +317,7 @@ class Kohana_Cache_File extends Cache implements Kohana_Cache_GarbageCollect {
 	 * @param   boolean  ignore_errors to prevent all exceptions interrupting exec
 	 * @param   boolean  only expired files
 	 * @return  boolean
-	 * @throws  Kohana_Cache_Exception
+	 * @throws  Cache_Exception
 	 */
 	protected function _delete_file(SplFileInfo $file, $retain_parent_directory = FALSE, $ignore_errors = FALSE, $only_expired = FALSE)
 	{
@@ -356,7 +356,7 @@ class Kohana_Cache_File extends Cache implements Kohana_Cache_GarbageCollect {
 					// Catch any delete file warnings
 					if ($e->getCode() === E_WARNING)
 					{
-						throw new Kohana_Cache_Exception(__METHOD__.' failed to delete file : :file', array(':file' => $file->getRealPath()));
+						throw new Cache_Exception(__METHOD__.' failed to delete file : :file', array(':file' => $file->getRealPath()));
 					}
 				}
 			}
@@ -405,7 +405,7 @@ class Kohana_Cache_File extends Cache implements Kohana_Cache_GarbageCollect {
 					// Catch any delete directory warnings
 					if ($e->getCode() === E_WARNING)
 					{
-						throw new Kohana_Cache_Exception(__METHOD__.' failed to delete directory : :directory', array(':directory' => $file->getRealPath()));
+						throw new Cache_Exception(__METHOD__.' failed to delete directory : :directory', array(':directory' => $file->getRealPath()));
 					}
 				}
 			}
@@ -448,13 +448,13 @@ class Kohana_Cache_File extends Cache implements Kohana_Cache_GarbageCollect {
 	 * @param   string   recursive 
 	 * @param   string   context 
 	 * @return  SplFileInfo
-	 * @throws  Kohana_Cache_Exception
+	 * @throws  Cache_Exception
 	 */
 	protected function _make_directory($directory, $mode = 0777, $recursive = FALSE, $context = NULL)
 	{
 		if ( ! mkdir($directory, $mode, $recursive, $context))
 		{
-			throw new Kohana_Cache_Exception('Failed to create the defined cache directory : :directory', array(':directory' => $directory));
+			throw new Cache_Exception('Failed to create the defined cache directory : :directory', array(':directory' => $directory));
 		}
 		chmod($directory, $mode);
 

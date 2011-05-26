@@ -67,7 +67,7 @@ Certain cache drivers support setting values with tags. To set a value to cache 
      $memcache = Cache::instance('memcachetag');
 
      // Test for tagging interface
-     if ($memcache instanceof Kohana_Cache_Tagging)
+     if ($memcache instanceof Cache_Tagging)
      {
           // Set a value with some tags for 30 seconds
           $memcache->set('foo', $object, 30, array('snafu', 'stfu', 'fubar'));
@@ -79,7 +79,7 @@ Certain cache drivers support setting values with tags. To set a value to cache 
           $memcache->set('foo', $object, 30);
      }
 
-It is possible to implement custom tagging solutions onto existing or new cache drivers by implementing the [Kohana_Cache_Tagging] interface. Kohana_Cache only applies the interface to drivers that support tagging natively as standard.
+It is possible to implement custom tagging solutions onto existing or new cache drivers by implementing the [Cache_Tagging] interface. Kohana_Cache only applies the interface to drivers that support tagging natively as standard.
 
 ### Getting a value from cache
 
@@ -115,7 +115,7 @@ It is possible to retrieve values from cache grouped by tag, using the [Cache::f
           // Find values based on tag
           return $cache->find('snafu');
      }
-     catch (Kohana_Cache_Exception $e)
+     catch (Cache_Exception $e)
      {
           // Handle gracefully
           return FALSE;
@@ -170,7 +170,7 @@ Some of the caching drivers support deleting by tag. This will remove all the ca
      $cache = Cache::instance();
 
      // Check for tagging interface
-     if ($cache instanceof Kohana_Cache_Tagging)
+     if ($cache instanceof Cache_Tagging)
      {
            // Delete all entries by the tag 'snafu'
            $cache->delete_tag('snafu');
@@ -189,7 +189,7 @@ When not automated, garbage collection is the responsibility of the developer. I
      $gc = 10;
 
      // If the GC probability is a hit
-     if (rand(0,99) <= $gc and $cache_file instanceof Kohana_Cache_GarbageCollect)
+     if (rand(0,99) <= $gc and $cache_file instanceof Cache_GarbageCollect)
      {
           // Garbage Collect
           $cache_file->garbage_collect();
@@ -199,10 +199,10 @@ When not automated, garbage collection is the responsibility of the developer. I
 
 Kohana Cache comes with two interfaces that are implemented where the drivers support them:
 
- - __[Kohana_Cache_Tagging] for tagging support on cache entries__
+ - __[Cache_Tagging] for tagging support on cache entries__
     - [Cache_MemcacheTag]
     - [Cache_Sqlite]
- - __[Kohana_Cache_GarbageCollect] for garbage collection with drivers without native support__
+ - __[Cache_GarbageCollect] for garbage collection with drivers without native support__
     - [Cache_File]
     - [Cache_Sqlite]
 
@@ -212,7 +212,7 @@ When using interface specific caching features, ensure that code checks for the 
     $cache = Cache::instance();
 
     // Test for Garbage Collection
-    if ($cache instanceof Kohana_Cache_GarbageCollect)
+    if ($cache instanceof Cache_GarbageCollect)
     {
          // Collect garbage
          $cache->garbage_collect();

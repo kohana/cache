@@ -1,6 +1,6 @@
 # About Kohana Cache
 
-[Kohana_Cache] provides a common interface to a variety of caching engines. [Kohana_Cache_Tagging] is
+[Kohana_Cache] provides a common interface to a variety of caching engines. [Cache_Tagging] is
 supported where available natively to the cache system. Kohana Cache supports multiple 
 instances of cache engines through a grouped singleton pattern.
 

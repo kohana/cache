@@ -17,13 +17,13 @@ class Kohana_Cache_Xcache extends Cache {
 	 * Check for existence of the APC extension
 	 *
 	 * @param  array     configuration
-	 * @throws  Kohana_Cache_Exception
+	 * @throws  Cache_Exception
 	 */
 	protected function __construct(array $config)
 	{
 		if ( ! extension_loaded('xcache'))
 		{
-			throw new Kohana_Cache_Exception('PHP Xcache extension is not available.');
+			throw new Cache_Exception('PHP Xcache extension is not available.');
 		}
 
 		parent::__construct($config);

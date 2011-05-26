@@ -43,13 +43,13 @@ class Kohana_Cache_Apc extends Cache {
 	 * be instantiated using the `Cache::instance()` method.
 	 *
 	 * @param  array     configuration
-	 * @throws Kohana_Cache_Exception
+	 * @throws Cache_Exception
 	 */
 	protected function __construct(array $config)
 	{
 		if ( ! extension_loaded('apc'))
 		{
-			throw new Kohana_Cache_Exception('PHP APC extension is not available.');
+			throw new Cache_Exception('PHP APC extension is not available.');
 		}
 
 		parent::__construct($config);
@@ -67,7 +67,7 @@ class Kohana_Cache_Apc extends Cache {
 	 * @param   string   id of cache to entry
 	 * @param   string   default value to return if cache miss
 	 * @return  mixed
-	 * @throws  Kohana_Cache_Exception
+	 * @throws  Cache_Exception
 	 */
 	public function get($id, $default = NULL)
 	{

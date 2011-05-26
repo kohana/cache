@@ -110,14 +110,14 @@ class Kohana_Cache_Memcache extends Cache {
 	 * Constructs the memcache Kohana_Cache object
 	 *
 	 * @param   array     configuration
-	 * @throws  Kohana_Cache_Exception
+	 * @throws  Cache_Exception
 	 */
 	protected function __construct(array $config)
 	{
 		// Check for the memcache extention
 		if ( ! extension_loaded('memcache'))
 		{
-			throw new Kohana_Cache_Exception('Memcache PHP extention not loaded');
+			throw new Cache_Exception('Memcache PHP extention not loaded');
 		}
 
 		parent::__construct($config);
@@ -131,7 +131,7 @@ class Kohana_Cache_Memcache extends Cache {
 		if ( ! $servers)
 		{
 			// Throw an exception if no server found
-			throw new Kohana_Cache_Exception('No Memcache servers defined in configuration');
+			throw new Cache_Exception('No Memcache servers defined in configuration');
 		}
 
 		// Setup default server configuration
@@ -155,7 +155,7 @@ class Kohana_Cache_Memcache extends Cache {
 
 			if ( ! $this->_memcache->addServer($server['host'], $server['port'], $server['persistent'], $server['weight'], $server['timeout'], $server['retry_interval'], $server['status'], $server['failure_callback']))
 			{
-				throw new Kohana_Cache_Exception('Memcache could not connect to host \':host\' using port \':port\'', array(':host' => $server['host'], ':port' => $server['port']));
+				throw new Cache_Exception('Memcache could not connect to host \':host\' using port \':port\'', array(':host' => $server['host'], ':port' => $server['port']));
 			}
 		}
 
@@ -175,7 +175,7 @@ class Kohana_Cache_Memcache extends Cache {
 	 * @param   string   id of cache to entry
 	 * @param   string   default value to return if cache miss
 	 * @return  mixed
-	 * @throws  Kohana_Cache_Exception
+	 * @throws  Cache_Exception
 	 */
 	public function get($id, $default = NULL)
 	{
