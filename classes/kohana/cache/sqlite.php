@@ -10,7 +10,7 @@
  * @copyright  (c) 2009-2010 Kohana Team
  * @license    http://kohanaphp.com/license
  */
-class Kohana_Cache_Sqlite extends Cache implements Kohana_Cache_Tagging, Kohana_Cache_GarbageCollect {
+class Kohana_Cache_Sqlite extends Cache implements Cache_Tagging, Cache_GarbageCollect {
 
 	/**
 	 * Database resource
@@ -26,7 +26,7 @@ class Kohana_Cache_Sqlite extends Cache implements Kohana_Cache_Tagging, Kohana_
 	 * @param  array     configuration
 	 * @throws  Kohana_Cache_Exception
 	 */
-	protected function __construct(array $config)
+	public function __construct(array $config)
 	{
 		parent::__construct($config);
 

@@ -1,91 +1,279 @@
 <?php
 
-class KohanaCacheTest extends PHPUnit_Framework_TestCase {
+class Kohana_CacheTest extends PHPUnit_Framework_TestCase {
 
-	static protected $test_instance;
+	const BAD_GROUP_DEFINITION  = 1010;
+	const NO_DRIVER_DEFINITION = 1111;
 
-	public function setUp()
+	/**
+	 * Tests that cache is not a singleton
+	 * 
+	 * @return  void
+	 */
+	public function test_not_singleton()
 	{
-		self::$test_instance = Cache::instance('file');
-		self::$test_instance->delete_all();
+		$cache = $this->getMockForAbstractClass('Cache', array(array()),
+			'Cache_Mock_Not_Singleton');
 
-		self::$test_instance->set('testGet1', 'foo', 3600);
-	}
+		// Get the constructor method
+		$constructorMethod = new ReflectionMethod($cache, '__construct');
 
-	public function tearDown()
-	{
-		self::$test_instance->delete_all();
-		self::$test_instance = NULL;
+		// Test the constructor for hidden visibility
+		$this->assertTrue($constructorMethod->isPublic(), 
+			'__construct is does not have protected visibility');
 	}
 
 	/**
-	 * Tests the cache static instance method
+	 * Data provider for test_factory
+	 *
+	 * @return  array
 	 */
-	public function testInstance()
+	public function provider_factory()
 	{
-		$file_instance  = Cache::instance('file');
-		$file_instance2 = Cache::instance('file');
+		$tmp = realpath(sys_get_temp_dir());
 
-		// Try and load a Cache instance
-		$this->assertType('Kohana_Cache', Cache::instance());
-		$this->assertType('Kohana_Cache_File', $file_instance);
-
-		// Test instances are only initialised once
-		$this->assertTrue(spl_object_hash($file_instance) == spl_object_hash($file_instance2));
-
-		// Test the publically accessible Cache instance store
-		$this->assertTrue(spl_object_hash(Cache::$instances['file']) == spl_object_hash($file_instance));
-
-		// Get the constructor method
-		$constructorMethod = new ReflectionMethod($file_instance, '__construct');
-
-		// Test the constructor for hidden visibility
-		$this->assertTrue($constructorMethod->isProtected(), '__construct is does not have protected visibility');
+		return array(
+			// Test default group and config
+			array(
+				NULL,
+				NULL,
+				new Cache_File(Kohana::config('cache')->get('file'))
+			),
+			// Test default group and custom config
+			array(
+				NULL,
+				array(
+					'driver'     => 'file',
+					'cache_dir'  => $tmp,
+					
+				),
+				new Cache_File(array(
+					'driver'     => 'file',
+					'cache_dir'  => $tmp,
+					
+				))
+			),
+			// Test defined group and default config
+			array(
+				'file',
+				NULL,
+				new Cache_File(Kohana::config('cache')->get('file'))
+			),
+			// Test defined group and custom config
+			array(
+				'file',
+				array(
+					'driver'     => 'file',
+					'cache_dir'  => $tmp,
+				
+				),
+				new Cache_File(array(
+					'driver'     => 'file',
+					'cache_dir'  => $tmp
+				))
+			),
+			// Test bad group definition with attempted loaded config
+			array(
+				Kohana_CacheTest::BAD_GROUP_DEFINITION,
+				NULL,
+				'Failed to load Kohana Cache group: 1010'
+			),
+			// Test group definition with no driver
+			array(
+				Kohana_CacheTest::NO_DRIVER_DEFINITION,
+				array(
+					'notdriver'  => 'NanunanuNoweaheorsmdndf'
+				),
+				'No cache driver configuration setting found!'
+			)
+		);
 	}
 
-	public function testGet()
+	/**
+	 * Tests the [Cache::factory()] method behaves as expected
+	 * 
+	 * @dataProvider provider_factory
+	 *
+	 * @return  void
+	 */
+	public function test_factory($group, $config, $expected)
 	{
-		// Try and get a non property
-		$this->assertNull(self::$test_instance->get('testGet0'));
+		if (in_array($group, array(
+			Kohana_CacheTest::BAD_GROUP_DEFINITION,
+			Kohana_CacheTest::NO_DRIVER_DEFINITION
+			)
+		))
+		{
+			$this->setExpectedException('Cache_Exception');
+		}
 
-		// Try and get a non property with default return value
-		$this->assertEquals('bar', self::$test_instance->get('testGet0', 'bar'));
+		try
+		{
+			$cache = Cache::factory($group, $config);
+		}
+		catch (Cache_Exception $e)
+		{
+			$this->assertSame($expected, $e->getMessage());
+			throw $e;
+		}
 
-		// Try and get a real cached property
-		$this->assertEquals('foo', self::$test_instance->get('testGet1'));
+		$this->assertInstanceOf(get_class($expected), $cache);
+		$this->assertSame($expected->config(), $cache->config());
 	}
 
-	public function testSet()
+	/**
+	 * Data provider for test_config
+	 *
+	 * @return  array
+	 */
+	public function provider_config()
 	{
-		$value = 'foobar';
-		$value2 = 'snafu';
-
-		// Set a new property
-		$this->assertTrue(self::$test_instance->set('testSet1', $value));
-
-		// Test the property exists
-		$this->assertEquals(self::$test_instance->get('testSet1'), $value);
-
-		// Test short set
-		$this->assertTrue(self::$test_instance->set('testSet2', $value2, 3));
-
-		// Test the property exists
-		$this->assertEquals(self::$test_instance->get('testSet2'), $value2);
-
-		// Allow test2 to expire
-		sleep(4);
-
-		// Test the property has expired
-		$this->assertNull(self::$test_instance->get('testSet2'));
+		return array(
+			array(
+				array(
+					'server'     => 'otherhost',
+					'port'       => 5555,
+					'persistent' => TRUE,
+				),
+				NULL,
+				NULL,
+				array(
+					'server'     => 'otherhost',
+					'port'       => 5555,
+					'persistent' => TRUE,
+				),
+			),
+			array(
+				'foo',
+				'bar',
+				NULL,
+				array(
+					'server'     => 'localhost',
+					'port'       => 11211,
+					'persistent' => FALSE,
+					'foo'        => 'bar'
+				)
+			),
+			array(
+				'server',
+				NULL,
+				'localhost',
+				array(
+					'server'     => 'localhost',
+					'port'       => 11211,
+					'persistent' => FALSE,
+				)
+			),
+			array(
+				NULL,
+				NULL,
+				array(
+					'server'     => 'localhost',
+					'port'       => 11211,
+					'persistent' => FALSE,
+				),
+				array(
+					'server'     => 'localhost',
+					'port'       => 11211,
+					'persistent' => FALSE,
+				)
+			)
+		);
 	}
 
-	public function testDelete()
+	/**
+	 * Tests the config method behaviour
+	 * 
+	 * @dataProvider provider_config
+	 *
+	 * @param   mixed    key value to set or get
+	 * @param   mixed    value to set to key
+	 * @param   mixed    expected result from [Cache::config()]
+	 * @param   array    expected config within cache
+	 * @return  void
+	 */
+	public function test_config($key, $value, $expected_result, array $expected_config)
 	{
-		
+		$cache = $this->getMock('Cache', array(
+				'get',
+				'set',
+				'delete',
+				'delete_all'
+			), 
+			array(
+				array(
+					'server'     => 'localhost',
+					'port'       => 11211,
+					'persistent' => FALSE
+				)
+			)
+		);
+
+		if ($expected_result === NULL)
+		{
+			$expected_result = $cache;
+		}
+
+		$this->assertSame($expected_result, $cache->config($key, $value));
+		$this->assertSame($expected_config, $cache->config());
 	}
 
-	public function testDeleteAll()
+	/**
+	 * Data provider for test_sanitize_id
+	 *
+	 * @return  array
+	 */
+	public function provider_sanitize_id()
 	{
-		
+		return array(
+			array(
+				'foo',
+				'foo'
+			),
+			array(
+				'foo+-!@',
+				'foo+-!@'
+			),
+			array(
+				'foo/bar',
+				'foo_bar',
+			),
+			array(
+				'foo\\bar',
+				'foo_bar'
+			),
+			array(
+				'foo bar',
+				'foo_bar'
+			),
+			array(
+				'foo\\bar snafu/stfu',
+				'foo_bar_snafu_stfu'
+			)
+		);
+	}
+
+	/**
+	 * Tests the [Cache::_sanitize_id()] method works as expected.
+	 * This uses some nasty reflection techniques to access a protected
+	 * method.
+	 * 
+	 * @dataProvider provider_sanitize_id
+	 *
+	 * @param   string    id 
+	 * @param   string    expected 
+	 * @return  void
+	 */
+	public function test_sanitize_id($id, $expected)
+	{
+		$cache = $this->getMockForAbstractClass('Cache', array(array(),
+			'Mock_Cache_Sanitize_Id')
+		);
+
+		$cache_reflection = new ReflectionClass($cache);
+		$sanitize_id = $cache_reflection->getMethod('_sanitize_id');
+		$sanitize_id->setAccessible(TRUE);
+
+		$this->assertSame($expected, $sanitize_id->invoke($cache, $id));
 	}
 }

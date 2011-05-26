@@ -84,11 +84,6 @@ abstract class Kohana_Cache {
 	public static $default = 'file';
 
 	/**
-	 * @var   Kohana_Cache instances
-	 */
-	public static $instances = array();
-
-	/**
 	 * Creates a singleton of a Kohana Cache group. If no group is supplied
 	 * the __default__ cache group is used.
 	 * 
@@ -102,39 +97,37 @@ abstract class Kohana_Cache {
 	 *     $foo_group = Cache::$instances['default'];
 	 *
 	 * @param   string   the name of the cache group to use [Optional]
+	 * @param   array    overload the configuration settings for this group
 	 * @return  Kohana_Cache
 	 * @throws  Kohana_Cache_Exception
 	 */
-	public static function instance($group = NULL)
+	public static function factory($group = NULL, array $config = NULL)
 	{
-		// If there is no group supplied
 		if ($group === NULL)
 		{
 			// Use the default setting
 			$group = Cache::$default;
 		}
 
-		if (isset(Cache::$instances[$group]))
+		if ($config === NULL)
 		{
-			// Return the current group if initiated already
-			return Cache::$instances[$group];
+			$config = Kohana::config('cache');
+
+			if ( ! $config->offsetExists($group))
+				throw new Cache_Exception('Failed to load Kohana Cache group: :group', 
+					array(':group' => $group)
+				);
+
+			$config = $config->get($group);
 		}
 
-		$config = Kohana::config('cache');
-
-		if ( ! $config->offsetExists($group))
-		{
-			throw new Kohana_Cache_Exception('Failed to load Kohana Cache group: :group', array(':group' => $group));
-		}
-
-		$config = $config->get($group);
+		if ( ! isset($config['driver']))
+			throw new Cache_Exception('No cache driver configuration setting found!');
 
 		// Create a new cache type instance
 		$cache_class = 'Cache_'.ucfirst($config['driver']);
-		Cache::$instances[$group] = new $cache_class($config);
 
-		// Return the instance
-		return Cache::$instances[$group];
+		return new $cache_class($config);
 	}
 
 	/**
@@ -147,20 +140,50 @@ abstract class Kohana_Cache {
 	 * 
 	 * @param  array     configuration
 	 */
-	protected function __construct(array $config)
+	public function __construct(array $config)
 	{
-		$this->_config = $config;
+		$this->config($config);
 	}
 
 	/**
-	 * Overload the __clone() method to prevent cloning
+	 * Getter and setter for the configuration. If no argument provided, the 
+	 * current configuration is returned. Otherwise the configuration is set
+	 * to this class.
+	 * 
+	 *     // Overwrite all configuration
+	 *     $cache->config(array('driver' => 'memcache', '...'));
+	 * 
+	 *     // Set a new configuration setting
+	 *     $cache->config('servers', array(
+	 *          'foo' => 'bar',
+	 *          '...'
+	 *          ));
+	 * 
+	 *     // Get a configuration setting
+	 *     $servers = $cache->config('servers);
 	 *
-	 * @return  void
-	 * @throws  Kohana_Cache_Exception
+	 * @param   mixed    key to set to array, either array or config path
+	 * @param   mixed    value to associate with key
+	 * @return  mixed
 	 */
-	public function __clone()
+	public function config($key = NULL, $value = NULL)
 	{
-		throw new Kohana_Cache_Exception('Cloning of Kohana_Cache objects is forbidden');
+		if ($key === NULL)
+			return $this->_config;
+
+		if (is_array($key))
+		{
+			$this->_config = $key;
+		}
+		else
+		{
+			if ($value === NULL)
+				return Arr::get($this->_config, $key);
+
+			$this->_config[$key] = $value;
+		}
+
+		return $this;
 	}
 
 	/**

@@ -9,7 +9,7 @@
 * @copyright  (c) 2009-2010 Kohana Team
 * @license    http://kohanaphp.com/license
  */
-class Kohana_Cache_MemcacheTag extends Cache_Memcache implements Kohana_Cache_Tagging {
+class Kohana_Cache_MemcacheTag extends Cache_Memcache implements Cache_Tagging {
 
 	/** 
 	 * Constructs the memcache object
@@ -17,7 +17,7 @@ class Kohana_Cache_MemcacheTag extends Cache_Memcache implements Kohana_Cache_Ta
 	 * @param  array     configuration
 	 * @throws  Kohana_Cache_Exception
 	 */
-	protected function __construct(array $config)
+	public function __construct(array $config)
 	{
 		parent::__construct($config);
 

@@ -38,7 +38,7 @@
  * @copyright  (c) 2009-2010 Kohana Team
  * @license    http://kohanaphp.com/license
  */
-class Kohana_Cache_File extends Cache implements Kohana_Cache_GarbageCollect {
+class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
 
 	/**
 	 * Creates a hashed filename based on the string. This is used
@@ -67,7 +67,7 @@ class Kohana_Cache_File extends Cache implements Kohana_Cache_GarbageCollect {
 	 * @param   array    config 
 	 * @throws  Kohana_Cache_Exception
 	 */
-	protected function __construct(array $config)
+	public function __construct(array $config)
 	{
 		// Setup parent
 		parent::__construct($config);
@@ -373,7 +373,7 @@ class Kohana_Cache_File extends Cache implements Kohana_Cache_GarbageCollect {
 					$name = $files->getFilename();
 
 					// If the name is not a dot
-					if ($name != '.' AND $name != '..' AND substr($file->getFilename(), 0, 1) == '.')
+					if ($name != '.' AND $name != '..' AND substr($file->getFilename(), 0, 1) != '.')
 					{
 						// Create new file resource
 						$fp = new SplFileInfo($files->getRealPath());
