@@ -1,4 +1,11 @@
 <?php
+/**
+*  @package    Kohana/Cache
+ * @category   Test
+ * @author     Kohana Team
+ * @copyright  (c) 2009-2010 Kohana Team
+ * @license    http://kohanaphp.com/license
+ */
 
 class Kohana_CacheTest extends PHPUnit_Framework_TestCase {
 
@@ -64,6 +71,25 @@ class Kohana_CacheTest extends PHPUnit_Framework_TestCase {
 		$this->assertSame($expected->config(), $cache->config());
 	}
 
+	/**
+	 * Tests that `clone($cache)` will be prevented to maintain singleton
+	 *
+	 * @return  void
+	 * @expectedException Cache_Exception
+	 */
+	public function test_cloning_fails()
+	{
+		try
+		{
+			$cache_clone = clone(Cache::instance('file'));
+		}
+		catch (Cache_Exception $e)
+		{
+			$this->assertSame('Cloning of Kohana_Cache objects is forbidden', 
+				$e->getMessage());
+			throw $e;
+		}
+	}
 
 	/**
 	 * Data provider for test_config
@@ -197,4 +223,4 @@ class Kohana_CacheTest extends PHPUnit_Framework_TestCase {
 
 		$this->assertSame($expected, $sanitize_id->invoke($cache, $id));
 	}
-}
+} // End Kohana_CacheTest
