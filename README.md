@@ -9,13 +9,11 @@ Supported cache solutions
 Currently this module supports the following cache methods.
 
 1. APC
-2. eAccelerator
-3. Memcache
-4. Memcached-tags (Supports tags)
-5. SQLite (Supports tags)
-6. File
-7. Xcache
-8. Wincache
+2. Memcache
+3. Memcached-tags (Supports tags)
+4. SQLite (Supports tags)
+5. File
+6. Wincache
 
 Planned support
 ---------------
