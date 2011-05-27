@@ -1,15 +1,12 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 return array
 (
-	'memcache' => array
-	(
+	'memcache' => array(
 		'driver'             => 'memcache',
 		'default_expire'     => 3600,
 		'compression'        => FALSE,              // Use Zlib compression (can cause issues with integers)
-		'servers'            => array
-		(
-			array
-			(
+		'servers'            => array(
+			array(
 				'host'             => 'localhost',  // Memcache Server
 				'port'             => 11211,        // Memcache port number
 				'persistent'       => FALSE,        // Persistent connection
@@ -21,15 +18,12 @@ return array
 		),
 		'instant_death'      => TRUE,               // Take server offline immediately on first fail (no retry)
 	),
-	'memcachetag' => array
-	(
+	'memcachetag' => array(
 		'driver'             => 'memcachetag',
 		'default_expire'     => 3600,
 		'compression'        => FALSE,              // Use Zlib compression (can cause issues with integers)
-		'servers'            => array
-		(
-			array
-			(
+		'servers'            => array(
+			array(
 				'host'             => 'localhost',  // Memcache Server
 				'port'             => 11211,        // Memcache port number
 				'persistent'       => FALSE,        // Persistent connection
@@ -41,36 +35,35 @@ return array
 		),
 		'instant_death'      => TRUE,
 	),
-	'apc'      => array
-	(
+	'apc'      => array(
 		'driver'             => 'apc',
 		'default_expire'     => 3600,
 	),
-	'wincache' => array
-	(
+	'wincache' => array(
 		'driver'             => 'wincache',
 		'default_expire'     => 3600,
 	),
-	'sqlite'   => array
-	(
+	'sqlite'   => array(
 		'driver'             => 'sqlite',
 		'default_expire'     => 3600,
 		'database'           => APPPATH.'cache/kohana-cache.sql3',
 		'schema'             => 'CREATE TABLE caches(id VARCHAR(127) PRIMARY KEY, tags VARCHAR(255), expiration INTEGER, cache TEXT)',
 	),
-	'eaccelerator'           => array
-	(
+	'eaccelerator'           => array(
 		'driver'             => 'eaccelerator',
 	),
-	'xcache'   => array
-	(
+	'xcache'   => array(
 		'driver'             => 'xcache',
 		'default_expire'     => 3600,
 	),
-	'file'    => array
-	(
+	'file'    => array(
 		'driver'             => 'file',
 		'cache_dir'          => APPPATH.'cache',
 		'default_expire'     => 3600,
+		'ignore_on_delete'   => array(
+			'.gitignore',
+			'.git',
+			'.svn'
+		)
 	)
 );

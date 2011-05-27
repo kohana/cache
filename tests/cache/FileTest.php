@@ -29,4 +29,25 @@ class Kohana_FileTest extends Kohana_CacheBasicMethodsTest {
 		$this->cache(Cache::instance('file'));
 	}
 
+	/**
+	 * Tests that ignored files are not removed from file cache
+	 *
+	 * @return  void
+	 */
+	public function test_ignore_delete_file()
+	{
+		$cache = $this->cache();
+		$config = Kohana::config('cache')->get('file');
+		$file = $config['cache_dir'].'/.gitignore';
+
+		// Lets pollute the cache folder
+		file_put_contents($file, 'foobar');
+
+		$this->assertTrue($cache->delete_all());
+		$this->assertTrue(file_exists($file));
+		$this->assertEquals('foobar', file_get_contents($file));
+
+		unlink($file);
+	}
+
 } // End Kohana_SqliteTest

@@ -329,8 +329,13 @@ class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
 			{
 				try
 				{
+					// Handle ignore files
+					if (in_array($file->getFilename(), $this->config('ignore_on_delete')))
+					{
+						$delete = FALSE;
+					}
 					// If only expired is not set
-					if ($only_expired === FALSE)
+					elseif ($only_expired === FALSE)
 					{
 						// We want to delete the file
 						$delete = TRUE;
@@ -344,12 +349,11 @@ class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
 						$delete = $data->expiry < time();
 					}
 
-					// If the delete flag is set
+					// If the delete flag is set delete file
 					if ($delete === TRUE)
-					{
-						// Try to delete
-						unlink($file->getRealPath());
-					}
+						return unlink($file->getRealPath());
+					else
+						return FALSE;
 				}
 				catch (ErrorException $e)
 				{
@@ -373,7 +377,7 @@ class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
 					$name = $files->getFilename();
 
 					// If the name is not a dot
-					if ($name != '.' AND $name != '..' AND substr($file->getFilename(), 0, 1) == '.')
+					if ($name != '.' AND $name != '..')
 					{
 						// Create new file resource
 						$fp = new SplFileInfo($files->getRealPath());
@@ -407,7 +411,13 @@ class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
 					{
 						throw new Cache_Exception(__METHOD__.' failed to delete directory : :directory', array(':directory' => $file->getRealPath()));
 					}
+					throw $e;
 				}
+			}
+			else
+			{
+				// We get here if a file has already been deleted
+				return FALSE;
 			}
 		}
 		// Catch all exceptions

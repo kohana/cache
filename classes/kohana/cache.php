@@ -202,7 +202,7 @@ abstract class Kohana_Cache {
 	 * @return  void
 	 * @throws  Cache_Exception
 	 */
-	public function __clone()
+	final public function __clone()
 	{
 		throw new Cache_Exception('Cloning of Kohana_Cache objects is forbidden');
 	}
