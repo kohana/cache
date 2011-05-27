@@ -28,13 +28,7 @@ class Kohana_WincacheTest extends Kohana_CacheBasicMethodsTest {
 
 		if ( ! extension_loaded('wincache'))
 		{
-			$this->markTestSkipped('APC PHP Extension is not available');
-		}
-
-		if (ini_get('apc.enable_cli') != '1')
-		{
-			$this->markTestSkipped('Unable to test APC in CLI mode. To fix '.
-				'place "apc.enable_cli=1" in your php.ini file');
+			$this->markTestSkipped('Wincache PHP Extension is not available');
 		}
 
 		$this->cache(Cache::instance('wincache'));
