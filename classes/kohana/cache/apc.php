@@ -132,4 +132,35 @@ class Kohana_Cache_Apc extends Cache {
 	{
 		return apc_clear_cache('user');
 	}
-}
+
+	/**
+	 * Increments a given value by the step value supplied.
+	 * Useful for shared counters and other persistent integer based
+	 * tracking.
+	 *
+	 * @param   string    id of cache entry to increment
+	 * @param   int       step value to increment by
+	 * @return  integer
+	 * @return  boolean
+	 */
+	public function increment($id, $step = 1)
+	{
+		return apc_inc($id, $step);
+	}
+
+	/**
+	 * Decrements a given value by the step value supplied.
+	 * Useful for shared counters and other persistent integer based
+	 * tracking.
+	 *
+	 * @param   string    id of cache entry to decrement
+	 * @param   int       step value to decrement by
+	 * @return  integer
+	 * @return  boolean
+	 */
+	public function decrement($id, $step = 1)
+	{
+		return apc_dec($id, $step);
+	}
+
+} // End Kohana_Cache_Apc
