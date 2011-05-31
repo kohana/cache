@@ -7,12 +7,11 @@ instances of cache engines through a grouped singleton pattern.
 ## Supported cache engines
 
  *  APC ([Cache_Apc])
- *  eAccelerator ([Cache_Eaccelerator])
  *  File ([Cache_File])
  *  Memcached ([Cache_Memcache])
  *  Memcached-tags ([Cache_Memcachetag])
  *  SQLite ([Cache_Sqlite])
- *  Xcache ([Cache_Xcache])
+ *  Wincache
 
 ## Introduction to caching
 
@@ -45,13 +44,12 @@ Getting and setting values to cache is very simple when using the _Kohana Cache_
 Driver           | Storage      | Speed     | Tags     | Distributed | Automatic Garbage Collection | Notes
 ---------------- | ------------ | --------- | -------- | ----------- | ---------------------------- | -----------------------
 APC              | __Memory__   | Excellent | No       | No          | Yes | Widely available PHP opcode caching solution, improves php execution performance
-eAccelerator     | __Memory__   | Excellent | No       | No          | Yes | Limited support and no longer developed. Included for legacy systems
+Wincache         | __Memory__   | Excellent | No       | No          | Yes | Windows variant of APC
 File             | __Disk__     | Poor      | No       | No          | No  | Marginally faster than execution
-Memcache (tag)   | __Memory__   | Good      | No (yes) | Yes         | Yes | Generally fast distributed solution, but has a speed hit due to variable network latency
+Memcache (tag)   | __Memory__   | Good      | No (yes) | Yes         | Yes | Generally fast distributed solution, but has a speed hit due to variable network latency and serialization
 Sqlite           | __Disk__     | Poor      | Yes      | No          | No  | Marginally faster than execution
-Xcache           | __Memory__   | Excellent | Yes      | No          | Yes | Very fast memory solution and alternative to APC
 
-It is possible to have hybrid cache solutions that use a combination of the engines above in different contexts. This is supported with _Kohana Cache_ as well.
+It is possible to have hybrid cache solutions that use a combination of the engines above in different contexts. This is supported with _Kohana Cache_ as well
 
 ## Minimum requirements
 

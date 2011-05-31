@@ -102,21 +102,6 @@ failure_callback | __NO__   | (_[callback](http://www.php.net/manual/en/language
 		                                  tags VARCHAR(255), expiration INTEGER, cache TEXT)',
 	),
 
-## Eaccelerator settings
-
-	'eaccelerator' array
-	(
-		'driver'             => 'eaccelerator',
-	),
-
-## Xcache settings
-
-	'xcache'   => array
-	(
-		'driver'             => 'xcache',
-		'default_expire'     => 3600,
-	),
-
 ## File settings
 
 	'file'    => array
@@ -125,6 +110,15 @@ failure_callback | __NO__   | (_[callback](http://www.php.net/manual/en/language
 		'cache_dir'          => 'cache/.kohana_cache',
 		'default_expire'     => 3600,
 	)
+
+## Wincache settings
+
+	'wincache' => array
+	(
+		'driver'             => 'wincache',
+		'default_expire'     => 3600,
+	),
+
 
 ## Override existing configuration group
 
