@@ -3,7 +3,7 @@
 *  @package    Kohana/Cache
  * @category   Test
  * @author     Kohana Team
- * @copyright  (c) 2009-2010 Kohana Team
+ * @copyright  (c) 2009-2011 Kohana Team
  * @license    http://kohanaphp.com/license
  */
 

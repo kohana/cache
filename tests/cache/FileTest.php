@@ -1,5 +1,5 @@
 <?php
-include_once('CacheBasicMethodsTest.php');
+include_once(Kohana::find_file('tests/cache', 'CacheBasicMethodsTest'));
 
 /**
 *  @package    Kohana/Cache/Memcache

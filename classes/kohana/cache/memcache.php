@@ -80,7 +80,7 @@
  * @copyright  (c) 2009-2010 Kohana Team
  * @license    http://kohanaphp.com/license
  */
-class Kohana_Cache_Memcache extends Cache {
+class Kohana_Cache_Memcache extends Cache implements Cache_Arithmetic {
 
 	// Memcache has a maximum cache lifetime of 30 days
 	const CACHE_CEILING = 2592000;
@@ -320,5 +320,35 @@ class Kohana_Cache_Memcache extends Cache {
 				array($this, '_failed_request'
 				));
 		}
+	}
+
+	/**
+	 * Increments a given value by the step value supplied.
+	 * Useful for shared counters and other persistent integer based
+	 * tracking.
+	 *
+	 * @param   string    id of cache entry to increment
+	 * @param   int       step value to increment by
+	 * @return  integer
+	 * @return  boolean
+	 */
+	public function increment($id, $step = 1)
+	{
+		
+	}
+
+	/**
+	 * Decrements a given value by the step value supplied.
+	 * Useful for shared counters and other persistent integer based
+	 * tracking.
+	 *
+	 * @param   string    id of cache entry to decrement
+	 * @param   int       step value to decrement by
+	 * @return  integer
+	 * @return  boolean
+	 */
+	public function decrement($id, $step = 1)
+	{
+		
 	}
 }
