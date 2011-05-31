@@ -50,4 +50,42 @@ class Kohana_FileTest extends Kohana_CacheBasicMethodsTest {
 		unlink($file);
 	}
 
+	/**
+	 * Provider for test_utf8
+	 *
+	 * @return  array
+	 */
+	public function provider_utf8()
+	{
+		return array(
+			array(
+				'This is â ütf-8 Ӝ☃ string',
+				'This is â ütf-8 Ӝ☃ string'
+			),
+			array(
+				'㆓㆕㆙㆛',
+				'㆓㆕㆙㆛'
+			),
+			array(
+				'அஆஇஈஊ',
+				'அஆஇஈஊ'
+			)
+		);
+	}
+
+	/**
+	 * Tests the file driver supports utf-8 strings
+	 *
+	 * @dataProvider provider_utf8
+	 *
+	 * @return  void
+	 */
+	public function test_utf8($input, $expected)
+	{
+		$cache = $this->cache();
+		$cache->set('utf8', $input);
+
+		$this->assertSame($expected, $cache->get('utf8'));
+	}
+
 } // End Kohana_SqliteTest

@@ -52,7 +52,7 @@ class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
 	 */
 	protected static function filename($string)
 	{
-		return sha1($string).'.json';
+		return sha1($string).'.cache';
 	}
 
 	/**
@@ -140,24 +140,29 @@ class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
 			}
 			else
 			{
-				// Open the file and extract the json
-				$json = $file->openFile()->current();
+				// Open the file and parse data
+				$created  = $file->getMTime();
+				$data     = $file->openFile();
+				$lifetime = $data->fgets();
 
-				// Decode the json into PHP object
-				$data = json_decode($json);
+				// If we're at the EOF at this point, corrupted!
+				if ($data->eof())
+				{
+					throw new Cache_Exception(__METHOD__.' corrupted cache file!');
+				}
+
+				$cache    = $data->fgets();
 
 				// Test the expiry
-				if ($data->expiry < time())
+				if (($created + (int) $lifetime) < time())
 				{
 					// Delete the file
 					$this->_delete_file($file, NULL, TRUE);
-
-					// Return default value
 					return $default;
 				}
 				else
 				{
-					return ($data->type === 'string') ? $data->payload : unserialize($data->payload);
+					return unserialize($cache);
 				}
 			}
 			
@@ -225,16 +230,9 @@ class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
 
 		try
 		{
-			$type = gettype($data);
-
-			// Serialize the data
-			$data = json_encode( (object) array(
-				'payload'  => ($type === 'string') ? $data : serialize($data),
-				'expiry'   => time() + $lifetime,
-				'type'     => $type
-			));
-
-			$size = strlen($data);
+			$data = $lifetime."\n".serialize($data);
+			$file->fwrite($data, strlen($data));
+			return (bool) $file->fflush();
 		}
 		catch (ErrorException $e)
 		{
@@ -246,16 +244,6 @@ class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
 			}
 
 			// Else rethrow the error exception
-			throw $e;
-		}
-
-		try
-		{
-			$file->fwrite($data, $size);
-			return (bool) $file->fflush();
-		}
-		catch (Exception $e)
-		{
 			throw $e;
 		}
 	}
