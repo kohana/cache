@@ -37,7 +37,7 @@ class Kohana_FileTest extends Kohana_CacheBasicMethodsTest {
 	public function test_ignore_delete_file()
 	{
 		$cache = $this->cache();
-		$config = Kohana::config('cache')->get('file');
+		$config = Kohana::$config->load('cache')->get('file');
 		$file = $config['cache_dir'].'/.gitignore';
 
 		// Lets pollute the cache folder

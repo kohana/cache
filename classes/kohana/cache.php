@@ -120,7 +120,7 @@ abstract class Kohana_Cache {
 			return Cache::$instances[$group];
 		}
 
-		$config = Kohana::config('cache');
+		$config = Kohana::$config->load('cache');
 
 		if ( ! $config->offsetExists($group))
 		{
