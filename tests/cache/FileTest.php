@@ -8,7 +8,7 @@ include_once(Kohana::find_file('tests/cache', 'CacheBasicMethodsTest'));
  * @copyright  (c) 2009-2010 Kohana Team
  * @license    http://kohanaphp.com/license
  */
-class Kohana_FileTest extends Kohana_CacheBasicMethodsTest {
+class Kohana_Cache_FileTest extends Kohana_CacheBasicMethodsTest {
 
 	/**
 	 * This method MUST be implemented by each driver to setup the `Cache`
