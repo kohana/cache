@@ -57,6 +57,16 @@ abstract class Kohana_CacheBasicMethodsTest extends PHPUnit_Framework_TestCase {
 		$object->foo = 'foo';
 		$object->bar = 'bar';
 
+		$html_text = <<<TESTTEXT
+<!doctype html>  
+<head> 
+</head> 
+
+<body>
+</body>
+</html>
+TESTTEXT;
+
 		return array(
 			array(
 				array(
@@ -173,6 +183,17 @@ abstract class Kohana_CacheBasicMethodsTest extends PHPUnit_Framework_TestCase {
 					'default' => 'something completely different!'
 				),
 				'something completely different!'
+			),
+			array(
+				array(
+					'id'      => 'new line test with HTML',
+					'value'   => $html_text,
+					'ttl'     => 10,
+					'wait'    => FALSE,
+					'type'    => 'string',
+					'default' => NULL,
+				),
+				$html_text
 			)
 		);
 	}
