@@ -16,7 +16,12 @@ abstract class Kohana_CacheArithmeticMethodsTest extends Kohana_CacheBasicMethod
 		parent::tearDown();
 
 		// Cleanup
-		$this->cache()->delete_all();
+		$cache = $this->cache();
+
+		if ($cache instanceof Cache)
+		{
+			$cache->delete_all();
+		}
 	}
 
 	/**
