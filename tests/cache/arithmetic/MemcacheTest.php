@@ -60,4 +60,44 @@ class Kohana_CacheArithmeticMemcacheTest extends Kohana_CacheArithmeticMethodsTe
 		$this->cache(Cache::instance('memcache'));
 	}
 
-}
+	/**
+	 * Tests that multiple values set with Memcache do not cause unexpected
+	 * results. For accurate results, this should be run with a memcache
+	 * configuration that includes multiple servers.
+	 * 
+	 * This is to test #4110
+	 *
+	 * @link    http://dev.kohanaframework.org/issues/4110
+	 * @return  void
+	 */
+	public function test_multiple_set()
+	{
+		$cache = $this->cache();
+		$id_set = 'set_id';
+		$ttl = 300;
+
+		$data = array(
+			'foobar',
+			0,
+			1.0,
+			new stdClass,
+			array('foo', 'bar' => 1),
+			TRUE,
+			NULL,
+			FALSE
+		);
+
+		$previous_set = $cache->get($id_set, NULL);
+
+		foreach ($data as $value)
+		{
+			// Use Equals over Sames as Objects will not be equal
+			$this->assertEquals($previous_set, $cache->get($id_set, NULL));
+			$cache->set($id_set, $value, $ttl);
+
+			$previous_set = $value;
+		}
+	}
+
+
+} // End Kohana_CacheArithmeticMemcacheTest
