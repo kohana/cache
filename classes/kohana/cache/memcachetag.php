@@ -38,6 +38,8 @@ class Kohana_Cache_MemcacheTag extends Cache_Memcache implements Kohana_Cache_Ta
 	 */
 	public function set_with_tags($id, $data, $lifetime = NULL, array $tags = NULL)
 	{
+		$id = $this->_sanitize_id($id);
+
 		$result = $this->set($id, $data, $lifetime);
 
 		if ($result and $tags)
