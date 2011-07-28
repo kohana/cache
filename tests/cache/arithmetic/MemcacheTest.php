@@ -3,6 +3,7 @@ include_once(Kohana::find_file('tests/cache/arithmetic', 'CacheArithmeticMethods
 
 /**
  * @package    Kohana/Cache/Memcache
+ * @group      kohana
  * @group      kohana.cache
  * @category   Test
  * @author     Kohana Team
