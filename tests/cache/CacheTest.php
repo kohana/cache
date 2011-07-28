@@ -1,6 +1,7 @@
 <?php
 /**
-*  @package    Kohana/Cache
+ * @package    Kohana/Cache
+ * @group      kohana.cache
  * @category   Test
  * @author     Kohana Team
  * @copyright  (c) 2009-2010 Kohana Team
