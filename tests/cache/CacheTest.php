@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package    Kohana/Cache
  * @group      kohana
@@ -8,7 +9,6 @@
  * @copyright  (c) 2009-2010 Kohana Team
  * @license    http://kohanaphp.com/license
  */
-
 class Kohana_CacheTest extends PHPUnit_Framework_TestCase {
 
 	const BAD_GROUP_DEFINITION  = 1010;

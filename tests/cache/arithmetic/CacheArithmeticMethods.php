@@ -10,7 +10,6 @@ include_once(Kohana::find_file('tests/cache', 'CacheBasicMethodsTest'));
  * @copyright  (c) 2009-2011 Kohana Team
  * @license    http://kohanaphp.com/license
  */
-
 abstract class Kohana_CacheArithmeticMethodsTest extends Kohana_CacheBasicMethodsTest {
 
 	public function tearDown()

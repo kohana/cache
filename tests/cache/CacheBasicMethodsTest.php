@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package    Kohana/Cache
  * @group      kohana
