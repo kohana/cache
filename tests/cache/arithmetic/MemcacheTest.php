@@ -10,7 +10,6 @@ include_once(Kohana::find_file('tests/cache/arithmetic', 'CacheArithmeticMethods
  * @copyright  (c) 2009-2011 Kohana Team
  * @license    http://kohanaphp.com/license
  */
-
 class Kohana_CacheArithmeticMemcacheTest extends Kohana_CacheArithmeticMethodsTest {
 
 
