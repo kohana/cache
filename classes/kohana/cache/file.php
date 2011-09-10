@@ -3,35 +3,35 @@
  * [Kohana Cache](api/Kohana_Cache) File driver. Provides a file based
  * driver for the Kohana Cache library. This is one of the slowest
  * caching methods.
- * 
+ *
  * ### Configuration example
- * 
+ *
  * Below is an example of a _file_ server configuration.
- * 
+ *
  *     return array(
  *          'file'   => array(                          // File driver group
  *                  'driver'         => 'file',         // using File driver
  *                  'cache_dir'     => APPPATH.'cache/.kohana_cache', // Cache location
  *           ),
  *     )
- * 
+ *
  * In cases where only one cache group is required, if the group is named `default` there is
  * no need to pass the group name when instantiating a cache instance.
- * 
+ *
  * #### General cache group configuration settings
- * 
+ *
  * Below are the settings available to all types of cache driver.
- * 
+ *
  * Name           | Required | Description
  * -------------- | -------- | ---------------------------------------------------------------
  * driver         | __YES__  | (_string_) The driver type to use
  * cache_dir      | __NO__   | (_string_) The cache directory to use for this cache instance
- * 
+ *
  * ### System requirements
- * 
+ *
  * *  Kohana 3.0.x
  * *  PHP 5.2.4 or greater
- * 
+ *
  * @package    Kohana/Cache
  * @category   Base
  * @author     Kohana Team
@@ -43,11 +43,11 @@ class Kohana_Cache_File extends Cache implements Kohana_Cache_GarbageCollect {
 	/**
 	 * Creates a hashed filename based on the string. This is used
 	 * to create shorter unique IDs for each cache filename.
-	 * 
+	 *
 	 *     // Create the cache filename
 	 *     $filename = Cache_File::filename($this->_sanitize_id($id));
 	 *
-	 * @param   string   string to hash into filename
+	 * @param   string  $string  string to hash into filename
 	 * @return  string
 	 */
 	protected static function filename($string)
@@ -64,7 +64,7 @@ class Kohana_Cache_File extends Cache implements Kohana_Cache_GarbageCollect {
 	 * Constructs the file cache driver. This method cannot be invoked externally. The file cache driver must
 	 * be instantiated using the `Cache::instance()` method.
 	 *
-	 * @param   array    config 
+	 * @param   array  $config  config
 	 * @throws  Kohana_Cache_Exception
 	 */
 	protected function __construct(array $config)
@@ -109,15 +109,15 @@ class Kohana_Cache_File extends Cache implements Kohana_Cache_GarbageCollect {
 
 	/**
 	 * Retrieve a cached value entry by id.
-	 * 
+	 *
 	 *     // Retrieve cache entry from file group
 	 *     $data = Cache::instance('file')->get('foo');
-	 * 
+	 *
 	 *     // Retrieve cache entry from file group and return 'bar' if miss
 	 *     $data = Cache::instance('file')->get('foo', 'bar');
 	 *
-	 * @param   string   id of cache to entry
-	 * @param   string   default value to return if cache miss
+	 * @param   string   $id       id of cache to entry
+	 * @param   string   $default  default value to return if cache miss
 	 * @return  mixed
 	 * @throws  Kohana_Cache_Exception
 	 */
@@ -160,7 +160,7 @@ class Kohana_Cache_File extends Cache implements Kohana_Cache_GarbageCollect {
 					return ($data->type === 'string') ? $data->payload : unserialize($data->payload);
 				}
 			}
-			
+
 		}
 		catch (ErrorException $e)
 		{
@@ -177,18 +177,18 @@ class Kohana_Cache_File extends Cache implements Kohana_Cache_GarbageCollect {
 
 	/**
 	 * Set a value to cache with id and lifetime
-	 * 
+	 *
 	 *     $data = 'bar';
-	 * 
+	 *
 	 *     // Set 'bar' to 'foo' in file group, using default expiry
 	 *     Cache::instance('file')->set('foo', $data);
-	 * 
+	 *
 	 *     // Set 'bar' to 'foo' in file group for 30 seconds
 	 *     Cache::instance('file')->set('foo', $data, 30);
 	 *
-	 * @param   string   id of cache entry
-	 * @param   string   data to set to cache
-	 * @param   integer  lifetime in seconds
+	 * @param   string   $id        id of cache entry
+	 * @param   string   $data      data to set to cache
+	 * @param   integer  $lifetime  lifetime in seconds
 	 * @return  boolean
 	 */
 	public function set($id, $data, $lifetime = NULL)
@@ -209,7 +209,7 @@ class Kohana_Cache_File extends Cache implements Kohana_Cache_GarbageCollect {
 		// If the directory path is not a directory
 		if ( ! $dir->isDir())
 		{
-			// Create the directory 
+			// Create the directory
 			if ( ! mkdir($directory, 0777, TRUE))
 			{
 				throw new Kohana_Cache_Exception(__METHOD__.' unable to create directory : :directory', array(':directory' => $directory));
@@ -262,11 +262,11 @@ class Kohana_Cache_File extends Cache implements Kohana_Cache_GarbageCollect {
 
 	/**
 	 * Delete a cache entry based on id
-	 * 
+	 *
 	 *     // Delete 'foo' entry from the file group
 	 *     Cache::instance('file')->delete('foo');
 	 *
-	 * @param   string   id to remove from cache
+	 * @param   string   $id  id to remove from cache
 	 * @return  boolean
 	 */
 	public function delete($id)
@@ -279,11 +279,11 @@ class Kohana_Cache_File extends Cache implements Kohana_Cache_GarbageCollect {
 
 	/**
 	 * Delete all cache entries.
-	 * 
+	 *
 	 * Beware of using this method when
 	 * using shared memory cache systems, as it will wipe every
 	 * entry within the system for all clients.
-	 * 
+	 *
 	 *     // Delete all cache entries in the file group
 	 *     Cache::instance('file')->delete_all();
 	 *
@@ -308,14 +308,14 @@ class Kohana_Cache_File extends Cache implements Kohana_Cache_GarbageCollect {
 
 	/**
 	 * Deletes files recursively and returns FALSE on any errors
-	 * 
+	 *
 	 *     // Delete a file or folder whilst retaining parent directory and ignore all errors
 	 *     $this->_delete_file($folder, TRUE, TRUE);
 	 *
-	 * @param   SplFileInfo  file
-	 * @param   boolean  retain the parent directory
-	 * @param   boolean  ignore_errors to prevent all exceptions interrupting exec
-	 * @param   boolean  only expired files
+	 * @param   SplFileInfo  $file                     file
+	 * @param   boolean      $retain_parent_directory  retain the parent directory
+	 * @param   boolean      $ignore_errors            ignore_errors to prevent all exceptions interrupting exec
+	 * @param   boolean      $only_expired             only expired files
 	 * @return  boolean
 	 * @throws  Kohana_Cache_Exception
 	 */
@@ -426,11 +426,11 @@ class Kohana_Cache_File extends Cache implements Kohana_Cache_GarbageCollect {
 
 	/**
 	 * Resolves the cache directory real path from the filename
-	 * 
+	 *
 	 *      // Get the realpath of the cache folder
 	 *      $realpath = $this->_resolve_directory($filename);
 	 *
-	 * @param   string   filename to resolve
+	 * @param   string  $filename  filename to resolve
 	 * @return  string
 	 */
 	protected function _resolve_directory($filename)
@@ -443,10 +443,10 @@ class Kohana_Cache_File extends Cache implements Kohana_Cache_GarbageCollect {
 	 * `mkdir` to ensure DRY principles
 	 *
 	 * @see     http://php.net/manual/en/function.mkdir.php
-	 * @param   string   directory 
-	 * @param   string   mode 
-	 * @param   string   recursive 
-	 * @param   string   context 
+	 * @param   string    $directory
+	 * @param   integer   $mode
+	 * @param   boolean   $recursive
+	 * @param   resource  $context
 	 * @return  SplFileInfo
 	 * @throws  Kohana_Cache_Exception
 	 */
@@ -458,6 +458,6 @@ class Kohana_Cache_File extends Cache implements Kohana_Cache_GarbageCollect {
 		}
 		chmod($directory, $mode);
 
-		return new SplFileInfo($directory);;
+		return new SplFileInfo($directory);
 	}
 }
