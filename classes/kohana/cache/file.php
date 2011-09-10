@@ -445,7 +445,7 @@ class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
 	 * Makes the cache directory if it doesn't exist. Simply a wrapper for
 	 * `mkdir` to ensure DRY principles
 	 *
-	 * @see     http://php.net/manual/en/function.mkdir.php
+	 * @link    http://www.php.net/manual/function.mkdir
 	 * @param   string   directory 
 	 * @param   string   mode 
 	 * @param   string   recursive 
