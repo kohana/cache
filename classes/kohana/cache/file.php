@@ -363,9 +363,21 @@ class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
 				// Create new DirectoryIterator
 				$files = new DirectoryIterator($file->getPathname());
 
+				// Remove the SplFileInfo open object
+				unset($file);
+
+				// Handle ignore files
+				if (in_array($files->getFilename(), $this->config('ignore_on_delete')))
+				{
+					return TRUE;
+				}
+
+				$folder_not_empty = FALSE;
+
 				// Iterate over each entry
 				while ($files->valid())
 				{
+
 					// Extract the entry name
 					$name = $files->getFilename();
 
@@ -375,15 +387,21 @@ class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
 						// Create new file resource
 						$fp = new SplFileInfo($files->getRealPath());
 						// Delete the file
-						$this->_delete_file($fp);
+						if ($this->_delete_file($fp) === FALSE)
+						{
+							$folder_not_empty = TRUE;
+						}
 					}
 
 					// Move the file pointer on
 					$files->next();
 				}
 
-				// If set to retain parent directory, return now
-				if ($retain_parent_directory)
+				if ($folder_not_empty)
+				{
+					return FALSE;
+				}
+				else if ($retain_parent_directory)
 				{
 					return TRUE;
 				}
