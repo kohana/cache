@@ -145,10 +145,13 @@ class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
 				$data     = $file->openFile();
 				$lifetime = $data->fgets();
 
+				// Test the expiry
 				// If we're at the EOF at this point, corrupted!
-				if ($data->eof())
+				if ($data->eof() OR ($created + (int) $lifetime) < time())
 				{
-					throw new Cache_Exception(__METHOD__.' corrupted cache file!');
+					// Delete the file
+					$this->_delete_file($file, NULL, TRUE);
+					return $default;
 				}
 
 				$cache = '';
@@ -158,17 +161,7 @@ class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
 					$cache .= $data->fgets();
 				}
 
-				// Test the expiry
-				if (($created + (int) $lifetime) < time())
-				{
-					// Delete the file
-					$this->_delete_file($file, NULL, TRUE);
-					return $default;
-				}
-				else
-				{
-					return unserialize($cache);
-				}
+				return unserialize($cache);
 			}
 
 		}
