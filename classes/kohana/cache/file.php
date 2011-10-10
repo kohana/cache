@@ -147,7 +147,7 @@ class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
 
 				// Test the expiry
 				// If we're at the EOF at this point, corrupted!
-				if ($data->eof() || ($created + (int) $lifetime) < time())
+				if ($data->eof() OR ($created + (int) $lifetime) < time())
 				{
 					// Delete the file
 					$this->_delete_file($file, NULL, TRUE);
