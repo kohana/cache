@@ -229,8 +229,16 @@ class Kohana_Cache_Memcache extends Cache {
 			$lifetime = 0;
 		}
 
-		// Set the data to memcache
-		return $this->_memcache->set($this->_sanitize_id($id), $data, $this->_flags, $lifetime);
+		// Try to replace data
+		$result = $this->_memcache->replace($this->_sanitize_id($id), $data, $this->_flags, $lifetime);
+
+		if ($result === FALSE)
+		{
+			// Set the data to memcache
+			$result = $this->_memcache->set($this->_sanitize_id($id), $data, $this->_flags, $lifetime);
+		}
+
+		return $result;
 	}
 
 	/**
