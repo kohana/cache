@@ -398,7 +398,7 @@ class Kohana_Cache_File extends Cache implements Kohana_Cache_GarbageCollect {
 					unset($files);
 
 					// Try to remove the parent directory
-					return rmdir($file->getRealPath());
+					return self::_rrmdir($file->getRealPath());
 				}
 				catch (ErrorException $e)
 				{
@@ -422,6 +422,32 @@ class Kohana_Cache_File extends Cache implements Kohana_Cache_GarbageCollect {
 			// Throw exception
 			throw $e;
 		}
+	}
+
+	/**
+	 * Recursive remove directory
+	 *
+	 * @param string
+	 * @return void
+	 */
+	protected static function _rrmdir($dir){
+		if (is_dir($dir)) {
+			$objects = scandir($dir);
+			foreach ($objects as $object) {
+				if ($object != "." && $object != "..") {
+					if (filetype($dir."/".$object) == "dir"){
+						rrmdir($dir."/".$object); 
+					}
+					else{
+						unlink($dir."/".$object);
+					}
+				}
+			}
+
+			reset($objects);
+			rmdir($dir);
+		} 
+
 	}
 
 	/**
