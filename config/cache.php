@@ -8,6 +8,7 @@ return array
 		'compression'        => FALSE,              // Use Zlib compression (can cause issues with integers)
 		'servers'            => array
 		(
+			/*
 			'local' => array
 			(
 				'host'             => 'localhost',  // Memcache Server
@@ -18,6 +19,7 @@ return array
 				'retry_interval'   => 15,
 				'status'           => TRUE,
 			),
+			*/
 		),
 		'instant_death'      => TRUE,               // Take server offline immediately on first fail (no retry)
 	),
@@ -28,6 +30,7 @@ return array
 		'compression'        => FALSE,              // Use Zlib compression (can cause issues with integers)
 		'servers'            => array
 		(
+			/*
 			'local' => array
 			(
 				'host'             => 'localhost',  // Memcache Server
@@ -38,6 +41,7 @@ return array
 				'retry_interval'   => 15,
 				'status'           => TRUE,
 			),
+			*/
 		),
 		'instant_death'      => TRUE,
 	),
