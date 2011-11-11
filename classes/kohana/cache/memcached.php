@@ -168,13 +168,7 @@ class Kohana_Cache_Memcached extends Cache implements Cache_Arithmetic {
 	 */
 	public function delete_all()
 	{
-		$result = $this->_memcached->flush();
-
-		// We must sleep after flushing, or overwriting will not work!
-		// @see http://php.net/manual/en/function.memcached-flush.php#81420
-		sleep(1);
-
-		return $result;
+		return $this->_memcached->flush();
 	}
 
 	/**
