@@ -42,7 +42,7 @@ class Kohana_Cache_Memcached extends Cache implements Cache_Arithmetic {
 		parent::__construct($config);
 
         // use persistent?
-        if (FALSE !== $pool = Arr::get($this->_config, 'persistent', FALSE)) {
+        if (FALSE === $pool = Arr::get($this->_config, 'persistent', FALSE)) {
             $this->_memcached = new Memcached();
         } else {
             $this->_memcached = new Memcached($pool);
