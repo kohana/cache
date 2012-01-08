@@ -221,6 +221,12 @@ TESTTEXT;
 
 		$this->assertTrue($cache->set($id, $value, $ttl));
 
+		if ($cache instanceof Cache_GarbageCollect)
+		{
+			// Make sure garbage collection doesn't delete unexpired files
+			$cache->garbage_collect();
+		}
+
 		if ($wait !== FALSE)
 		{
 			// Lets let the cache expire
