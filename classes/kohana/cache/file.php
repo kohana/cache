@@ -141,9 +141,7 @@ class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
 			else
 			{
 				// Open the file and parse data
-				$created  = $file->getMTime();
-				$data     = $file->openFile();
-				$lifetime = $data->fgets();
+				$data = $file->openFile();
 
 				// If we're at the EOF at this point, corrupted!
 				if ($data->eof())
@@ -151,15 +149,8 @@ class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
 					throw new Cache_Exception(__METHOD__.' corrupted cache file!');
 				}
 
-				$cache = '';
-
-				while ($data->eof() === FALSE)
-				{
-					$cache .= $data->fgets();
-				}
-
 				// Test the expiry
-				if (($created + (int) $lifetime) < time())
+				if ($this->_is_expired($file, $data))
 				{
 					// Delete the file
 					$this->_delete_file($file, NULL, TRUE);
@@ -167,6 +158,13 @@ class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
 				}
 				else
 				{
+					$cache = '';
+
+					while ($data->eof() === FALSE)
+					{
+						$cache .= $data->fgets();
+					}
+
 					return unserialize($cache);
 				}
 			}
@@ -300,6 +298,29 @@ class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
 	}
 
 	/**
+	 * Test if the file is expired.
+	 *
+	 * Provide $data to remove the first line containing lifetime.
+	 * If no $data is provided, it will be fetched from the $file.
+	 *
+	 * @param   SplFileInfo    $file  file to be tested
+	 * @param   SplFileObject  $data  file data
+	 * @return  boolean
+	 */
+	protected function _is_expired(SplFileInfo $file, SplFileObject $data = null)
+	{
+		if ($data === null)
+		{
+			$data = $file->openFile();
+		}
+
+		$lifetime = $data->fgets();
+		$created  = $file->getMTime();
+
+		return ($created + (int) $lifetime) < time();
+	}
+
+	/**
 	 * Deletes files recursively and returns FALSE on any errors
 	 *
 	 *     // Delete a file or folder whilst retaining parent directory and ignore all errors
@@ -336,10 +357,8 @@ class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
 					// Otherwise...
 					else
 					{
-						// Assess the file expiry to flag it for deletion
-						$json = $file->openFile('r')->current();
-						$data = json_decode($json);
-						$delete = $data->expiry < time();
+						// Delete if the file is expired
+						$delete = $this->_is_expired($file);
 					}
 
 					// If the delete flag is set delete file
@@ -375,7 +394,7 @@ class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
 						// Create new file resource
 						$fp = new SplFileInfo($files->getRealPath());
 						// Delete the file
-						$this->_delete_file($fp);
+						$this->_delete_file($fp, $retain_parent_directory, $ignore_errors, $only_expired);
 					}
 
 					// Move the file pointer on
