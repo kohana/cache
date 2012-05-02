@@ -40,7 +40,7 @@ class Kohana_CacheArithmeticMemcacheTest extends Kohana_CacheArithmeticMethodsTe
 		}
 
 		$memcache = new Memcache;
-		if ( ! $memcache->connect($config['servers'][0]['host'], 
+		if ( ! @$memcache->connect($config['servers'][0]['host'],
 			$config['servers'][0]['port']))
 		{
 			$this->markTestSkipped('Unable to connect to memcache server @ '.
