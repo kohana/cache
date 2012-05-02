@@ -2,7 +2,9 @@
 include_once(Kohana::find_file('tests/cache/arithmetic', 'CacheArithmeticMethods'));
 
 /**
-*  @package    Kohana/Cache/Memcache
+ * @package    Kohana/Cache
+ * @group      kohana
+ * @group      kohana.cache
  * @category   Test
  * @author     Kohana Team
  * @copyright  (c) 2009-2010 Kohana Team
