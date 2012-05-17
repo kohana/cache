@@ -6,7 +6,7 @@ return array
 		'default_expire'     => 3600,
 		'compression'        => FALSE,              // Use Zlib compression (can cause issues with integers)
 		'servers'            => array(
-			array(
+			'local' => array(
 				'host'             => 'localhost',  // Memcache Server
 				'port'             => 11211,        // Memcache port number
 				'persistent'       => FALSE,        // Persistent connection
@@ -23,7 +23,7 @@ return array
 		'default_expire'     => 3600,
 		'compression'        => FALSE,              // Use Zlib compression (can cause issues with integers)
 		'servers'            => array(
-			array(
+			'local' => array(
 				'host'             => 'localhost',  // Memcache Server
 				'port'             => 11211,        // Memcache port number
 				'persistent'       => FALSE,        // Persistent connection
