@@ -58,7 +58,7 @@ failure_callback | __NO__   | (_[callback](http://www.php.net/manual/en/language
 		                                            (can cause issues with integers)
 		'servers'            => array
 		(
-			array
+			'local' => array
 			(
 				'host'             => 'localhost',  // Memcache Server
 				'port'             => 11211,        // Memcache port number
@@ -74,7 +74,7 @@ failure_callback | __NO__   | (_[callback](http://www.php.net/manual/en/language
 		                                            (can cause issues with integers)
 		'servers'            => array
 		(
-			array
+			'local' => array
 			(
 				'host'             => 'localhost',  // Memcache Server
 				'port'             => 11211,        // Memcache port number
@@ -122,7 +122,7 @@ failure_callback | __NO__   | (_[callback](http://www.php.net/manual/en/language
 
 ## Override existing configuration group
 
-The following example demonstrates how to override an existing configuration setting, using the config file in `/application/config/cache.php`.
+The following example demonstrates how to override an existing configuration setting, using the config file in `/application/config/cache.php`. The key name used here, "external", can be any value you wish.
 
 	<?php defined('SYSPATH') or die('No direct script access.');
 	return array
@@ -135,7 +135,7 @@ The following example demonstrates how to override an existing configuration set
 			'servers'        => array
 			(
 				// Add a new server
-				array
+				'external' => array
 				(
 					'host'       => 'cache.domain.tld',
 					'port'       => 11211,
