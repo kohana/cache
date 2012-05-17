@@ -6,6 +6,7 @@ return array
 		'default_expire'     => 3600,
 		'compression'        => FALSE,              // Use Zlib compression (can cause issues with integers)
 		'servers'            => array(
+			/*
 			'local' => array(
 				'host'             => 'localhost',  // Memcache Server
 				'port'             => 11211,        // Memcache port number
@@ -15,6 +16,7 @@ return array
 				'retry_interval'   => 15,
 				'status'           => TRUE,
 			),
+			 */
 		),
 		'instant_death'      => TRUE,               // Take server offline immediately on first fail (no retry)
 	),
@@ -23,6 +25,7 @@ return array
 		'default_expire'     => 3600,
 		'compression'        => FALSE,              // Use Zlib compression (can cause issues with integers)
 		'servers'            => array(
+			/*
 			'local' => array(
 				'host'             => 'localhost',  // Memcache Server
 				'port'             => 11211,        // Memcache port number
@@ -32,6 +35,7 @@ return array
 				'retry_interval'   => 15,
 				'status'           => TRUE,
 			),
+			*/
 		),
 		'instant_death'      => TRUE,
 	),
