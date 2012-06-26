@@ -1,13 +1,13 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access.');
 /**
  * Kohana Cache Sqlite Driver
- * 
+ *
  * Requires SQLite3 and PDO
- * 
+ *
  * @package    Kohana/Cache
  * @category   Base
  * @author     Kohana Team
- * @copyright  (c) 2009-2010 Kohana Team
+ * @copyright  (c) 2009-2012 Kohana Team
  * @license    http://kohanaphp.com/license
  */
 class Kohana_Cache_Sqlite extends Cache implements Kohana_Cache_Tagging, Kohana_Cache_GarbageCollect {
@@ -23,7 +23,7 @@ class Kohana_Cache_Sqlite extends Cache implements Kohana_Cache_Tagging, Kohana_
 	 * Sets up the PDO SQLite table and
 	 * initialises the PDO connection
 	 *
-	 * @param  array     configuration
+	 * @param  array  $config  configuration
 	 * @throws  Kohana_Cache_Exception
 	 */
 	protected function __construct(array $config)
@@ -68,8 +68,8 @@ class Kohana_Cache_Sqlite extends Cache implements Kohana_Cache_Tagging, Kohana_
 	/**
 	 * Retrieve a value based on an id
 	 *
-	 * @param   string   id 
-	 * @param   string   default [Optional] Default value to return if id not found
+	 * @param   string  $id       id
+	 * @param   string  $default  default [Optional] Default value to return if id not found
 	 * @return  mixed
 	 * @throws  Kohana_Cache_Exception
 	 */
@@ -105,7 +105,7 @@ class Kohana_Cache_Sqlite extends Cache implements Kohana_Cache_Tagging, Kohana_
 		{
 			// Disable notices for unserializing
 			$ER = error_reporting(~E_NOTICE);
-			
+
 			// Return the valid cache data
 			$data = unserialize($result->cache);
 
@@ -120,9 +120,9 @@ class Kohana_Cache_Sqlite extends Cache implements Kohana_Cache_Tagging, Kohana_
 	/**
 	 * Set a value based on an id. Optionally add tags.
 	 *
-	 * @param   string   id 
-	 * @param   mixed    data 
-	 * @param   integer  lifetime [Optional]
+	 * @param   string   $id        id
+	 * @param   mixed    $data      data
+	 * @param   integer  $lifetime  lifetime [Optional]
 	 * @return  boolean
 	 */
 	public function set($id, $data, $lifetime = NULL)
@@ -133,8 +133,7 @@ class Kohana_Cache_Sqlite extends Cache implements Kohana_Cache_Tagging, Kohana_
 	/**
 	 * Delete a cache entry based on id
 	 *
-	 * @param   string   id 
-	 * @param   integer  timeout [Optional]
+	 * @param   string  $id  id
 	 * @return  boolean
 	 * @throws  Kohana_Cache_Exception
 	 */
@@ -181,11 +180,11 @@ class Kohana_Cache_Sqlite extends Cache implements Kohana_Cache_Tagging, Kohana_
 
 	/**
 	 * Set a value based on an id. Optionally add tags.
-	 * 
-	 * @param   string   id 
-	 * @param   mixed    data 
-	 * @param   integer  lifetime [Optional]
-	 * @param   array    tags [Optional]
+	 *
+	 * @param   string   $id        id
+	 * @param   mixed    $data      data
+	 * @param   integer  $lifetime  lifetime [Optional]
+	 * @param   array    $tags      tags [Optional]
 	 * @return  boolean
 	 * @throws  Kohana_Cache_Exception
 	 */
@@ -227,8 +226,7 @@ class Kohana_Cache_Sqlite extends Cache implements Kohana_Cache_Tagging, Kohana_
 	/**
 	 * Delete cache entries based on a tag
 	 *
-	 * @param   string   tag 
-	 * @param   integer  timeout [Optional]
+	 * @param   string  $tag  tag
 	 * @return  boolean
 	 * @throws  Kohana_Cache_Exception
 	 */
@@ -253,7 +251,7 @@ class Kohana_Cache_Sqlite extends Cache implements Kohana_Cache_Tagging, Kohana_
 	/**
 	 * Find cache entries based on a tag
 	 *
-	 * @param   string   tag 
+	 * @param   string  $tag  tag
 	 * @return  array
 	 * @throws  Kohana_Cache_Exception
 	 */
@@ -315,7 +313,7 @@ class Kohana_Cache_Sqlite extends Cache implements Kohana_Cache_Tagging, Kohana_
 	/**
 	 * Tests whether an id exists or not
 	 *
-	 * @param   string   id 
+	 * @param   string  $id  id
 	 * @return  boolean
 	 * @throws  Kohana_Cache_Exception
 	 */

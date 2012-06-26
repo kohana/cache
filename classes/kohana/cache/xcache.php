@@ -1,14 +1,14 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access.');
 /**
  * Kohana Cache Xcache Driver
- * 
+ *
  * Requires Xcache
  * http://xcache.lighttpd.net/
- * 
+ *
  * @package    Kohana
  * @category   Cache
  * @author     Kohana Team
- * @copyright  (c) 2009-2010 Kohana Team
+ * @copyright  (c) 2009-2012 Kohana Team
  * @license    http://kohanaphp.com/license
  */
 class Kohana_Cache_Xcache extends Cache {
@@ -16,7 +16,7 @@ class Kohana_Cache_Xcache extends Cache {
 	/**
 	 * Check for existence of the APC extension
 	 *
-	 * @param  array     configuration
+	 * @param  array  $config  configuration
 	 * @throws  Kohana_Cache_Exception
 	 */
 	protected function __construct(array $config)
@@ -32,8 +32,8 @@ class Kohana_Cache_Xcache extends Cache {
 	/**
 	 * Retrieve a value based on an id
 	 *
-	 * @param   string   id 
-	 * @param   string   default [Optional] Default value to return if id not found
+	 * @param   string  $id       id
+	 * @param   string  $default  default [Optional] Default value to return if id not found
 	 * @return  mixed
 	 */
 	public function get($id, $default = NULL)
@@ -43,10 +43,10 @@ class Kohana_Cache_Xcache extends Cache {
 
 	/**
 	 * Set a value based on an id. Optionally add tags.
-	 * 
-	 * @param   string   id 
-	 * @param   string   data 
-	 * @param   integer  lifetime [Optional]
+	 *
+	 * @param   string   $id        id
+	 * @param   string   $data      data
+	 * @param   integer  $lifetime  lifetime [Optional]
 	 * @return  boolean
 	 */
 	public function set($id, $data, $lifetime = NULL)
@@ -62,8 +62,7 @@ class Kohana_Cache_Xcache extends Cache {
 	/**
 	 * Delete a cache entry based on id
 	 *
-	 * @param   string   id 
-	 * @param   integer  timeout [Optional]
+	 * @param   string  $id  id
 	 * @return  boolean
 	 */
 	public function delete($id)
