@@ -209,8 +209,12 @@ class Kohana_Cache_Memcache extends Cache implements Cache_Arithmetic {
 	 * @param   integer  $lifetime  lifetime in seconds, maximum value 2592000
 	 * @return  boolean
 	 */
-	public function set($id, $data, $lifetime = 3600)
+	public function set($id, $data, $lifetime = NULL)
 	{
+		if(empty($lifetime))
+		{
+			$lifetime = Arr::get($this->_config, 'default_expire', Cache::DEFAULT_EXPIRE);
+		}
 		// If the lifetime is greater than the ceiling
 		if ($lifetime > Cache_Memcache::CACHE_CEILING)
 		{
