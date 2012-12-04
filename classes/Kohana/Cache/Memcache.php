@@ -270,7 +270,7 @@ class Kohana_Cache_Memcache extends Cache implements Cache_Arithmetic {
 
 		// We must sleep after flushing, or overwriting will not work!
 		// @see http://php.net/manual/en/function.memcache-flush.php#81420
-		sleep(1);
+		//sleep(1);
 
 		return $result;
 	}
