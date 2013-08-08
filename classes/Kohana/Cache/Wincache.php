@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access.');
 /**
  * [Kohana Cache](api/Kohana_Cache) Wincache driver. Provides an opcode based
  * driver for the Kohana Cache library.

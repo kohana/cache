@@ -1,7 +1,7 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access.');
 /**
  * Kohana Cache Exception
- * 
+ *
  * @package    Kohana/Cache
  * @category   Base
  * @author     Kohana Team

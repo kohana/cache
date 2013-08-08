@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access.');
 /**
  * [Kohana Cache](api/Kohana_Cache) APC driver. Provides an opcode based
  * driver for the Kohana Cache library.
@@ -64,7 +64,7 @@ class Kohana_Cache_Apc extends Cache implements Cache_Arithmetic {
 	 *     // Retrieve cache entry from apc group and return 'bar' if miss
 	 *     $data = Cache::instance('apc')->get('foo', 'bar');
 	 *
-	 * @param   string  $id       id of cache to entry
+	 * @param   string  $id       ID of cache entry
 	 * @param   string  $default  default value to return if cache miss
 	 * @return  mixed
 	 * @throws  Cache_Exception
@@ -163,4 +163,4 @@ class Kohana_Cache_Apc extends Cache implements Cache_Arithmetic {
 		return apc_dec($id, $step);
 	}
 
-} // End Kohana_Cache_Apc
+}

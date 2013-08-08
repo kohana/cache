@@ -19,9 +19,9 @@ abstract class Kohana_CacheBasicMethodsTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * This method MUST be implemented by each driver to setup the `Cache`
 	 * instance for each test.
-	 * 
+	 *
 	 * This method should do the following tasks for each driver test:
-	 * 
+	 *
 	 *  - Test the Cache instance driver is available, skip test otherwise
 	 *  - Setup the Cache instance
 	 *  - Call the parent setup method, `parent::setUp()`
@@ -34,7 +34,7 @@ abstract class Kohana_CacheBasicMethodsTest extends PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * Accessor method to `$_cache_driver`. 
+	 * Accessor method to `$_cache_driver`.
 	 *
 	 * @return  Cache
 	 * @return  self
@@ -60,9 +60,9 @@ abstract class Kohana_CacheBasicMethodsTest extends PHPUnit_Framework_TestCase {
 		$object->bar = 'bar';
 
 		$html_text = <<<TESTTEXT
-<!doctype html>  
-<head> 
-</head> 
+<!doctype html>
+<head>
+</head>
 
 <body>
 </body>
@@ -202,16 +202,16 @@ TESTTEXT;
 
 	/**
 	 * Tests the [Cache::set()] method, testing;
-	 * 
+	 *
 	 *  - The value is cached
 	 *  - The lifetime is respected
 	 *  - The returned value type is as expected
 	 *  - The default not-found value is respected
-	 * 
+	 *
 	 * @dataProvider provider_set_get
 	 *
-	 * @param   array    data 
-	 * @param   mixed    expected 
+	 * @param   array    data
+	 * @param   mixed    expected
 	 * @return  void
 	 */
 	public function test_set_get(array $data, $expected)
@@ -236,7 +236,7 @@ TESTTEXT;
 
 	/**
 	 * Tests the [Cache::delete()] method, testing;
-	 * 
+	 *
 	 *  - The a cached value is deleted from cache
 	 *  - The cache returns a TRUE value upon deletion
 	 *  - The cache returns a FALSE value if no value exists to delete
@@ -291,9 +291,9 @@ TESTTEXT;
 		foreach ($data as $key => $values)
 		{
 			// Verify data has been purged
-			$this->assertSame('Cache Deleted!', $cache->get($values[0]['id'], 
+			$this->assertSame('Cache Deleted!', $cache->get($values[0]['id'],
 				'Cache Deleted!'));
 		}
 	}
 
-} // End Kohana_CacheBasicMethodsTest
+}
