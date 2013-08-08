@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access.');
 /**
  * HTTT Caching adaptor class that provides caching services to the
  * [Request_Client] class, using HTTP cache control logic as defined in
@@ -22,13 +22,13 @@ class Kohana_HTTP_Cache {
 	/**
 	 * Factory method for HTTP_Cache that provides a convenient dependency
 	 * injector for the Cache library.
-	 * 
+	 *
 	 *      // Create HTTP_Cache with named cache engine
 	 *      $http_cache = HTTP_Cache::factory('memcache', array(
 	 *          'allow_private_cache' => FALSE
 	 *          )
 	 *      );
-	 * 
+	 *
 	 *      // Create HTTP_Cache with supplied cache engine
 	 *      $http_cache = HTTP_Cache::factory(Cache::instance('memcache'),
 	 *          array(
@@ -57,7 +57,7 @@ class Kohana_HTTP_Cache {
 	 * Basic cache key generator that hashes the entire request and returns
 	 * it. This is fine for static content, or dynamic content where user
 	 * specific information is encoded into the request.
-	 * 
+	 *
 	 *      // Generate cache key
 	 *      $cache_key = HTTP_Cache::basic_cache_key_generator($request);
 	 *
@@ -104,7 +104,7 @@ class Kohana_HTTP_Cache {
 	 * Constructor method for this class. Allows dependency injection of the
 	 * required components such as `Cache` and the cache key generator.
 	 *
-	 * @param   array $options 
+	 * @param   array $options
 	 */
 	public function __construct(array $options = array())
 	{
@@ -140,8 +140,8 @@ class Kohana_HTTP_Cache {
 
 		// If this is a destructive request, by-pass cache completely
 		if (in_array($request->method(), array(
-			HTTP_Request::POST, 
-			HTTP_Request::PUT, 
+			HTTP_Request::POST,
+			HTTP_Request::PUT,
 			HTTP_Request::DELETE)))
 		{
 			// Kill existing caches for this request
@@ -177,7 +177,7 @@ class Kohana_HTTP_Cache {
 		// Cache the response
 		$this->cache_response($cache_key, $request, $response);
 
-		$response->headers(HTTP_Cache::CACHE_STATUS_KEY, 
+		$response->headers(HTTP_Cache::CACHE_STATUS_KEY,
 			HTTP_Cache::CACHE_STATUS_MISS);
 
 		return $response;
@@ -241,19 +241,19 @@ class Kohana_HTTP_Cache {
 	 * Sets or gets the cache key generator callback for this caching
 	 * class. The cache key generator provides a unique hash based on the
 	 * `Request` object passed to it.
-	 * 
+	 *
 	 * The default generator is [HTTP_Cache::basic_cache_key_generator()], which
 	 * serializes the entire `HTTP_Request` into a unique sha1 hash. This will
 	 * provide basic caching for static and simple dynamic pages. More complex
 	 * algorithms can be defined and then passed into `HTTP_Cache` using this
 	 * method.
-	 * 
+	 *
 	 *      // Get the cache key callback
 	 *      $callback = $http_cache->cache_key_callback();
-	 * 
+	 *
 	 *      // Set the cache key callback
 	 *      $http_cache->cache_key_callback('Foo::cache_key');
-	 * 
+	 *
 	 *      // Alternatively, in PHP 5.3 use a closure
 	 *      $http_cache->cache_key_callback(function (Request $request) {
 	 *            return sha1($request->render());
@@ -278,7 +278,7 @@ class Kohana_HTTP_Cache {
 	/**
 	 * Creates a cache key for the request to use for caching
 	 * [Kohana_Response] returned by [Request::execute].
-	 * 
+	 *
 	 * This is the default cache key generating logic, but can be overridden
 	 * by setting [HTTP_Cache::cache_key_callback()].
 	 *
@@ -500,4 +500,4 @@ class Kohana_HTTP_Cache {
 		return $this->_response_time - $this->_request_time;
 	}
 
-} // End Kohana_HTTP_Cache
+}

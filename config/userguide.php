@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access.');
 
 return array(
 	// Leave this alone
@@ -9,15 +9,15 @@ return array(
 
 			// Whether this modules userguide pages should be shown
 			'enabled' => TRUE,
-			
+
 			// The name that should show up on the userguide index page
 			'name' => 'Cache',
 
 			// A short description of this module, shown on the index page
 			'description' => 'Common interface for caching engines.',
-			
+
 			// Copyright message, shown in the footer for this module
 			'copyright' => '&copy; 2008–2012 Kohana Team',
-		)	
+		)
 	)
 );

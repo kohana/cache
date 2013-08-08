@@ -70,7 +70,7 @@ abstract class Kohana_CacheArithmeticMethodsTest extends Kohana_CacheBasicMethod
 
 	/**
 	 * Test for [Cache_Arithmetic::increment()]
-	 * 
+	 *
 	 * @dataProvider provider_increment
 	 *
 	 * @param   integer  start state
@@ -142,7 +142,7 @@ abstract class Kohana_CacheArithmeticMethodsTest extends Kohana_CacheBasicMethod
 
 	/**
 	 * Test for [Cache_Arithmetic::decrement()]
-	 * 
+	 *
 	 * @dataProvider provider_decrement
 	 *
 	 * @param   integer  start state
@@ -170,4 +170,4 @@ abstract class Kohana_CacheArithmeticMethodsTest extends Kohana_CacheBasicMethod
 		);
 	}
 
-} // End Kohana_CacheArithmeticMethodsTest
+}

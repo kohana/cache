@@ -53,7 +53,7 @@ class Kohana_CacheTest extends PHPUnit_Framework_TestCase {
 
 	/**
 	 * Tests the [Cache::factory()] method behaves as expected
-	 * 
+	 *
 	 * @dataProvider provider_instance
 	 *
 	 * @return  void
@@ -101,7 +101,7 @@ class Kohana_CacheTest extends PHPUnit_Framework_TestCase {
 		}
 		catch (Cache_Exception $e)
 		{
-			$this->assertSame('Cloning of Kohana_Cache objects is forbidden', 
+			$this->assertSame('Cloning of Kohana_Cache objects is forbidden',
 				$e->getMessage());
 			throw $e;
 		}
@@ -154,7 +154,7 @@ class Kohana_CacheTest extends PHPUnit_Framework_TestCase {
 
 	/**
 	 * Tests the config method behaviour
-	 * 
+	 *
 	 * @dataProvider provider_config
 	 *
 	 * @param   mixed    key value to set or get
@@ -215,11 +215,11 @@ class Kohana_CacheTest extends PHPUnit_Framework_TestCase {
 	 * Tests the [Cache::_sanitize_id()] method works as expected.
 	 * This uses some nasty reflection techniques to access a protected
 	 * method.
-	 * 
+	 *
 	 * @dataProvider provider_sanitize_id
 	 *
-	 * @param   string    id 
-	 * @param   string    expected 
+	 * @param   string    id
+	 * @param   string    expected
 	 * @return  void
 	 */
 	public function test_sanitize_id($id, $expected)
@@ -239,4 +239,4 @@ class Kohana_CacheTest extends PHPUnit_Framework_TestCase {
 
 		$this->assertSame($expected, $sanitize_id->invoke($cache, $id));
 	}
-} // End Kohana_CacheTest
+}
