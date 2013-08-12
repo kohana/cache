@@ -11,16 +11,10 @@ Currently this module supports the following cache methods.
 1. APC
 2. Memcache
 3. Memcached-tags (Supports tags)
-4. SQLite (Supports tags)
-5. File
-6. Wincache
-
-Planned support
----------------
-
-In the near future, additional support for the following methods will be included.
-
-1. Memcached
+4. Redis
+5. SQLite (Supports tags)
+6. File
+7. Wincache
 
 Introduction to caching
 -----------------------
