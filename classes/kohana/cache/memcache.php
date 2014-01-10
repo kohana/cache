@@ -214,18 +214,13 @@ class Kohana_Cache_Memcache extends Cache implements Cache_Arithmetic {
 		// If the lifetime is greater than the ceiling
 		if ($lifetime > Cache_Memcache::CACHE_CEILING)
 		{
-			// Set the lifetime to maximum cache time
-			$lifetime = Cache_Memcache::CACHE_CEILING + time();
+			// Normalize: Set the lifetime to maximum cache time
+			$lifetime = Cache_Memcache::CACHE_CEILING;
 		}
-		// Else if the lifetime is greater than zero
-		elseif ($lifetime > 0)
+		// Else if the lifetime is less than zero
+		elseif ($lifetime < 0)
 		{
-			$lifetime += time();
-		}
-		// Else
-		else
-		{
-			// Normalise the lifetime
+			// Normalize: set the lifetime to minimum cache time
 			$lifetime = 0;
 		}
 
