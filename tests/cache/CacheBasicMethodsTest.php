@@ -196,6 +196,28 @@ TESTTEXT;
 					'default' => NULL,
 				),
 				$html_text
+			),
+			array(
+				array(
+					'id'      => 'test with 60*5',
+					'value'   => 'blabla',
+					'ttl'     => 60*5,
+					'wait'    => FALSE,
+					'type'    => 'string',
+					'default' => NULL,
+				),
+				'blabla'
+			),
+			array(
+				array(
+					'id'      => 'test with 60*50',
+					'value'   => 'bla bla',
+					'ttl'     => 60*50,
+					'wait'    => FALSE,
+					'type'    => 'string',
+					'default' => NULL,
+				),
+				'bla bla'
 			)
 		);
 	}
