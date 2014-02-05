@@ -80,7 +80,7 @@ class Kohana_Request_Client_CacheTest extends Unittest_TestCase {
 
 		$response = $request->client()->execute($request);
 
-		$this->assertSame(HTTP_Cache::CACHE_STATUS_MISS, 
+		$this->assertSame(HTTP_Cache::CACHE_STATUS_MISS,
 			$response->headers(HTTP_Cache::CACHE_STATUS_KEY));
 	}
 
@@ -119,7 +119,7 @@ class Kohana_Request_Client_CacheTest extends Unittest_TestCase {
 				->cache_response($key, $request, $response)
 		);
 
-		$this->assertSame(HTTP_Cache::CACHE_STATUS_SAVED, 
+		$this->assertSame(HTTP_Cache::CACHE_STATUS_SAVED,
 			$response->headers(HTTP_Cache::CACHE_STATUS_KEY));
 	}
 
@@ -143,7 +143,7 @@ class Kohana_Request_Client_CacheTest extends Unittest_TestCase {
 
 		$response->headers(array(
 			'cache-control'                  => 'max-age='.$lifetime,
-			HTTP_Cache::CACHE_STATUS_KEY => 
+			HTTP_Cache::CACHE_STATUS_KEY =>
 				HTTP_Cache::CACHE_STATUS_HIT
 		));
 
@@ -254,12 +254,12 @@ class Kohana_Request_Client_CacheTest extends Unittest_TestCase {
 	{
 		return $this->getMock('Cache_File', array(), array(), '', FALSE);
 	}
-} // End Kohana_Request_Client_CacheTest
+}
 
-class Controller_Kohana_Request_CacheTest_Dummy extends Controller 
+class Controller_Kohana_Request_CacheTest_Dummy extends Controller
 {
 	public function action_index()
 	{
-	
+
 	}
 }

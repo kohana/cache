@@ -16,9 +16,9 @@ class Kohana_CacheArithmeticMemcacheTest extends Kohana_CacheArithmeticMethodsTe
 	/**
 	 * This method MUST be implemented by each driver to setup the `Cache`
 	 * instance for each test.
-	 * 
+	 *
 	 * This method should do the following tasks for each driver test:
-	 * 
+	 *
 	 *  - Test the Cache instance driver is available, skip test otherwise
 	 *  - Setup the Cache instance
 	 *  - Call the parent setup method, `parent::setUp()`
@@ -39,7 +39,7 @@ class Kohana_CacheArithmeticMemcacheTest extends Kohana_CacheArithmeticMethodsTe
 		}
 
 		$memcache = new Memcache;
-		if ( ! $memcache->connect($config['servers']['local']['host'], 
+		if ( ! $memcache->connect($config['servers']['local']['host'],
 			$config['servers']['local']['port']))
 		{
 			$this->markTestSkipped('Unable to connect to memcache server @ '.
@@ -64,7 +64,7 @@ class Kohana_CacheArithmeticMemcacheTest extends Kohana_CacheArithmeticMethodsTe
 	 * Tests that multiple values set with Memcache do not cause unexpected
 	 * results. For accurate results, this should be run with a memcache
 	 * configuration that includes multiple servers.
-	 * 
+	 *
 	 * This is to test #4110
 	 *
 	 * @link    http://dev.kohanaframework.org/issues/4110
@@ -100,4 +100,4 @@ class Kohana_CacheArithmeticMemcacheTest extends Kohana_CacheArithmeticMethodsTe
 	}
 
 
-} // End Kohana_CacheArithmeticMemcacheTest
+}
