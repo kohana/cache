@@ -298,6 +298,42 @@ class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
 		$this->_delete_file($this->_cache_dir, TRUE, FALSE, TRUE);
 		return;
 	}
+	
+	/**
+	* Recursive remove directory and files within them.
+	*
+	* @param  string $path Path to the directory.
+	* @return boolean
+	*/
+	protected function _delete_directory($path)
+	{
+		if ( ! is_dir($path))
+		{
+			return FALSE;
+		}
+
+		$items = scandir($path);
+		// Delete links
+		unset($items['.'], $items['..']);
+
+		foreach ($items as $item)
+		{
+			if (is_dir($path.DIRECTORY_SEPARATOR.$item))
+			{
+				if ( ! $this->_delete_directory($path.DIRECTORY_SEPARATOR.$item))
+				{
+					// Failed delete current subdirectory
+					return FALSE;
+				}
+			}
+			else
+			{
+				unlink($path.DIRECTORY_SEPARATOR.$item);
+			}
+		}
+
+		return rmdir($path);
+	}
 
 	/**
 	 * Deletes files recursively and returns FALSE on any errors
@@ -395,7 +431,7 @@ class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
 					unset($files);
 
 					// Try to remove the parent directory
-					return rmdir($file->getRealPath());
+					return $this->_delete_directory($file->getRealPath());
 				}
 				catch (ErrorException $e)
 				{
