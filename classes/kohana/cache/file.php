@@ -314,7 +314,7 @@ class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
 
 		$items = scandir($path);
 		// Delete links
-		unset($items['.'], $item['..']);
+		unset($items['.'], $items['..']);
 
 		foreach ($items as $item)
 		{
