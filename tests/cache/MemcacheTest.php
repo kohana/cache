@@ -10,7 +10,7 @@ include_once(Kohana::find_file('tests/cache', 'CacheBasicMethodsTest'));
  * @copyright  (c) 2009-2012 Kohana Team
  * @license    http://kohanaphp.com/license
  */
-class Kohana_SqliteTest extends Kohana_CacheBasicMethodsTest {
+class Kohana_MemcacheTest extends Kohana_CacheBasicMethodsTest {
 
 	/**
 	 * This method MUST be implemented by each driver to setup the `Cache`
@@ -28,17 +28,17 @@ class Kohana_SqliteTest extends Kohana_CacheBasicMethodsTest {
 	{
 		parent::setUp();
 
-		if ( ! extension_loaded('pdo_sqlite'))
+		if ( ! extension_loaded('memcache'))
 		{
-			$this->markTestSkipped('SQLite PDO PHP Extension is not available');
+			$this->markTestSkipped('Memcache PHP Extension is not available');
 		}
 
-		if ( ! Kohana::$config->load('cache.sqlite'))
+		if ( ! Kohana::$config->load('cache.memcache'))
 		{
-			$this->markTestIncomplete('Unable to load sqlite configuration');
+			$this->markTestIncomplete('Unable to load memcache configuration');
 		}
 
-		$this->cache(Cache::instance('sqlite'));
+		$this->cache(Cache::instance('memcache'));
 	}
 
-} // End Kohana_SqliteTest
+} // End Kohana_MemcacheTest
