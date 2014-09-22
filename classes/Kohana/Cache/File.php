@@ -94,6 +94,12 @@ class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
 			throw new Cache_Exception('Unable to create cache directory as a file already exists : :resource', array(':resource' => $this->_cache_dir->getRealPath()));
 		}
 
+		// Try to create directory if it doesn't exist
+		if ( ! $this->_cache_dir->isDir())
+		{
+			$this->_cache_dir = $this->_make_directory($directory, 0777, TRUE);
+		}
+
 		// Check the read status of the directory
 		if ( ! $this->_cache_dir->isReadable())
 		{
@@ -449,13 +455,12 @@ class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
 	 * @param   string    $directory
 	 * @param   integer   $mode
 	 * @param   boolean   $recursive
-	 * @param   resource  $context
 	 * @return  SplFileInfo
 	 * @throws  Cache_Exception
 	 */
-	protected function _make_directory($directory, $mode = 0777, $recursive = FALSE, $context = NULL)
+	protected function _make_directory($directory, $mode = 0777, $recursive = FALSE)
 	{
-		if ( ! mkdir($directory, $mode, $recursive, $context))
+		if ( ! mkdir($directory, $mode, $recursive))
 		{
 			throw new Cache_Exception('Failed to create the defined cache directory : :directory', array(':directory' => $directory));
 		}
