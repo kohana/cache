@@ -143,7 +143,7 @@ class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
 				// Open the file and parse data
 				$created  = $file->getMTime();
 				$data     = $file->openFile();
-				$lifetime = $data->fgets();
+				$lifetime = (int) $data->fgets();
 
 				// If we're at the EOF at this point, corrupted!
 				if ($data->eof())
@@ -159,7 +159,7 @@ class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
 				}
 
 				// Test the expiry
-				if (($created + (int) $lifetime) < time())
+				if (($lifetime !== 0) AND (($created + $lifetime) < time()))
 				{
 					// Delete the file
 					$this->_delete_file($file, NULL, TRUE);
