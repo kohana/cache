@@ -5,7 +5,6 @@ include_once(Kohana::find_file('tests/cache/arithmetic', 'CacheArithmeticMethods
  * @package    Kohana/Cache
  * @group      kohana
  * @group      kohana.cache
- * @group      wip
  * @category   Test
  * @author     Kohana Team
  * @copyright  (c) 2009-2012 Kohana Team
