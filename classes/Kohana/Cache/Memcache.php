@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
 /**
  * [Kohana Cache](api/Kohana_Cache) Memcache driver,
  *

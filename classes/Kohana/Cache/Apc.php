@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
 /**
  * [Kohana Cache](api/Kohana_Cache) APC driver. Provides an opcode based
  * driver for the Kohana Cache library.
