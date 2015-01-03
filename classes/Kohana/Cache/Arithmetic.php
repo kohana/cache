@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
 /**
  * Kohana Cache Arithmetic Interface, for basic cache integer based
  * arithmetic, addition and subtraction
