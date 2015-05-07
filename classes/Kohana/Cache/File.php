@@ -330,9 +330,11 @@ class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
 					else
 					{
 						// Assess the file expiry to flag it for deletion
-						$json = $file->openFile('r')->current();
-						$data = json_decode($json);
-						$delete = $data->expiry < time();
+						$created  = $file->getMTime();
+						$data     = $file->openFile();
+						$lifetime = $data->fgets();
+						
+						$delete = ($created + (int) $lifetime) < time();	
 					}
 
 					// If the delete flag is set delete file
@@ -368,7 +370,7 @@ class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
 						// Create new file resource
 						$fp = new SplFileInfo($files->getRealPath());
 						// Delete the file
-						$this->_delete_file($fp);
+						$this->_delete_file($fp, $retain_parent_directory, $ignore_errors, $only_expired);
 					}
 
 					// Move the file pointer on
