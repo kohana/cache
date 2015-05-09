@@ -141,9 +141,8 @@ class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
 			else
 			{
 				// Open the file and parse data
-				$created  = $file->getMTime();
-				$data     = $file->openFile();
-				$lifetime = (int) $data->fgets();
+				$data	= $file->openFile();
+				$data->fgets();
 
 				// If we're at the EOF at this point, corrupted!
 				if ($data->eof())
@@ -158,8 +157,11 @@ class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
 					$cache .= $data->fgets();
 				}
 
+				//close file
+				$data 	= null;
+
 				// Test the expiry
-				if (($lifetime !== 0) AND (($created + $lifetime) < time()))
+				if ($this->_is_expired($file))
 				{
 					// Delete the file
 					$this->_delete_file($file, NULL, TRUE);
@@ -328,11 +330,9 @@ class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
 					}
 					// Otherwise...
 					else
-					{
-						// Assess the file expiry to flag it for deletion
-						$json = $file->openFile('r')->current();
-						$data = json_decode($json);
-						$delete = $data->expiry < time();
+					{	
+						// Check if file is expired					
+						$delete = $this->_is_expired($file);
 					}
 
 					// If the delete flag is set delete file
@@ -368,7 +368,7 @@ class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
 						// Create new file resource
 						$fp = new SplFileInfo($files->getRealPath());
 						// Delete the file
-						$this->_delete_file($fp);
+						$this->_delete_file($fp, $retain_parent_directory, $ignore_errors, $only_expired);
 					}
 
 					// Move the file pointer on
@@ -418,6 +418,25 @@ class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
 			// Throw exception
 			throw $e;
 		}
+	}
+
+	/**
+	 * Checks if file is expired
+	 *
+	 *
+	 * @param   SplFileInfo  $file                 
+	 * @return  boolean
+	 */
+	protected function _is_expired(SplFileInfo $file)
+	{
+		$created  = $file->getMTime();
+		$data     = $file->openFile();
+		$lifetime = (int)$data->fgets();
+
+		//close file
+		$data = null;
+						
+		return (($lifetime !== 0) AND (($created + $lifetime) < time()));	
 	}
 
 	/**
