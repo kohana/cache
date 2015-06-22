@@ -155,7 +155,7 @@ class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
 				if (($lifetime !== 0) AND (($created + $lifetime) < time()))
 				{
 					// Delete the file
-					$this->_delete_file($file, NULL, TRUE);
+					$this->_delete_file($file, FALSE, TRUE);
 					return $default;
 				}
 
@@ -258,7 +258,7 @@ class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
 		$filename = Cache_File::filename($this->_sanitize_id($id));
 		$directory = $this->_resolve_directory($filename);
 
-		return $this->_delete_file(new SplFileInfo($directory.$filename), NULL, TRUE);
+		return $this->_delete_file(new SplFileInfo($directory.$filename), FALSE, TRUE);
 	}
 
 	/**
@@ -366,7 +366,7 @@ class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
 						// Create new file resource
 						$fp = new SplFileInfo($files->getRealPath());
 						// Delete the file
-						$this->_delete_file($fp);
+						$this->_delete_file($fp, $retain_parent_directory, $ignore_errors, $only_expired);
 					}
 
 					// Move the file pointer on
