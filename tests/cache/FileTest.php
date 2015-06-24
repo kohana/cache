@@ -108,4 +108,55 @@ class Kohana_Cache_FileTest extends Kohana_CacheBasicMethodsTest {
 		$this->assertSame($expected, $cache->get('utf8'));
 	}
 
+	/**
+	 * Tests garbage collection.
+	 * Tests if non-expired cache files withstand garbage collection
+	 *
+	 * @test
+	 */
+	public function test_garbage_collection()
+	{
+		$cache = $this->cache();
+		$cache->set('persistent', 'dummy persistent data', 3);
+		$cache->set('volatile', 'dummy volatile data', 1);
+
+		$this->assertTrue($this->is_file('persistent'));
+		$this->assertTrue($this->is_file('volatile'));
+
+		// sleep for more than a second
+		sleep(2);
+
+		$cache->garbage_collect();
+
+		$this->assertTrue($this->is_file('persistent'));
+		$this->assertFalse($this->is_file('volatile'));
+	}
+
+	/**
+	 * helper method for test_garbage_collection.
+	 * Tests if cache file exists given cache id.
+	 *
+	 * @param string $id cache id
+	 * @return boolean TRUE if file exists FALSE otherwise
+	 */
+	protected function is_file($id)
+	{
+		$cache = $this->cache();
+
+		$method_sanitize_id = new ReflectionMethod($cache, '_sanitize_id');
+		$method_sanitize_id->setAccessible(TRUE);
+		$method_filename = new ReflectionMethod($cache, 'filename');
+		$method_filename->setAccessible(TRUE);
+		$method_resolve_directory = new ReflectionMethod($cache, '_resolve_directory');
+		$method_resolve_directory->setAccessible(TRUE);
+
+		$sanitized_id = $method_sanitize_id->invoke($cache, $id);
+		$filename = $method_filename->invoke($cache, $sanitized_id);
+		$directory = $method_resolve_directory->invoke($cache, $filename);
+
+		$file = new SplFileInfo($directory.$filename);
+
+		//var_dump($cache->_is_expired($file));
+		return $file->isFile();
+	}
 } // End Kohana_SqliteTest
