@@ -38,6 +38,7 @@ class Kohana_Cache_FileTest extends Kohana_CacheBasicMethodsTest {
 						'cache_dir'          => APPPATH.'cache',
 						'default_expire'     => 3600,
 						'ignore_on_delete'   => array(
+							'file_we_want_to_keep.cache',
 							'.gitignore',
 							'.git',
 							'.svn'
@@ -58,7 +59,7 @@ class Kohana_Cache_FileTest extends Kohana_CacheBasicMethodsTest {
 	{
 		$cache = $this->cache();
 		$config = Kohana::$config->load('cache')->file;
-		$file = $config['cache_dir'].'/.gitignore';
+		$file = $config['cache_dir'].'/file_we_want_to_keep.cache';
 
 		// Lets pollute the cache folder
 		file_put_contents($file, 'foobar');
