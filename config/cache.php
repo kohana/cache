@@ -39,6 +39,12 @@ return array
 		'driver'             => 'apc',
 		'default_expire'     => 3600,
 	),
+	'redis'    => array(
+		'driver'             => 'redis',
+		'default_expire'     => 3600,
+		'host'               => 'localhost',
+		'port'               => 6379,
+	),
 	'wincache' => array(
 		'driver'             => 'wincache',
 		'default_expire'     => 3600,
