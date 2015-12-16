@@ -90,7 +90,15 @@ failure_callback | __NO__   | (_[callback](http://www.php.net/manual/en/language
 		'driver'             => 'apc',
 		'default_expire'     => 3600,
 	),
+	
+## APCu settings
 
+	'apcu'      => array
+	(
+		'driver'             => 'apcu',
+		'default_expire'     => 3600,
+	),
+	
 ## SQLite settings
 
 	'sqlite'   => array
