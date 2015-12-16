@@ -6,7 +6,7 @@ instances of cache engines through a grouped singleton pattern.
 
 ## Supported cache engines
 
- *  APC ([Cache_Apc])
+ *  APC/APCu ([Cache_Apc])
  *  File ([Cache_File])
  *  Memcached ([Cache_Memcache])
  *  Memcached-tags ([Cache_Memcachetag])
@@ -16,7 +16,7 @@ instances of cache engines through a grouped singleton pattern.
 ## Introduction to caching
 
 Caching should be implemented with consideration. Generally, caching the result of resources
-is faster than reprocessing them. Choosing what, how and when to cache is vital. [PHP APC](http://php.net/manual/en/book.apc.php) is one of the fastest caching systems available, closely followed by [Memcached](http://memcached.org/). [SQLite](http://www.sqlite.org/) and File caching are two of the slowest cache methods, however usually faster than reprocessing
+is faster than reprocessing them. Choosing what, how and when to cache is vital. [PHP APCu](http://php.net/manual/en/book.apcu.php) is one of the fastest caching systems available, closely followed by [Memcached](http://memcached.org/). [SQLite](http://www.sqlite.org/) and File caching are two of the slowest cache methods, however usually faster than reprocessing
 a complex set of instructions.
 
 Caching engines that use memory are considerably faster than file based alternatives. But
@@ -43,7 +43,7 @@ Getting and setting values to cache is very simple when using the _Kohana Cache_
 
 Driver           | Storage      | Speed     | Tags     | Distributed | Automatic Garbage Collection | Notes
 ---------------- | ------------ | --------- | -------- | ----------- | ---------------------------- | -----------------------
-APC              | __Memory__   | Excellent | No       | No          | Yes | Widely available PHP opcode caching solution, improves php execution performance
+APC/APCu         | __Memory__   | Excellent | No       | No          | Yes | Widely available PHP opcode caching solution, improves php execution performance
 Wincache         | __Memory__   | Excellent | No       | No          | Yes | Windows variant of APC
 File             | __Disk__     | Poor      | No       | No          | No  | Marginally faster than execution
 Memcache (tag)   | __Memory__   | Good      | No (yes) | Yes         | Yes | Generally fast distributed solution, but has a speed hit due to variable network latency and serialization
