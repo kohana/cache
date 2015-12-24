@@ -38,7 +38,7 @@
  * @copyright  (c) 2009-2012 Kohana Team
  * @license    http://kohanaphp.com/license
  */
-class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
+class Kohana_Cache_File extends Cache implements Kohana_Cache_GarbageCollect {
 
 	/**
 	 * Creates a hashed filename based on the string. This is used

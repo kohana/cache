@@ -10,7 +10,7 @@
  * @copyright  (c) 2009-2012 Kohana Team
  * @license    http://kohanaphp.com/license
  */
-class Kohana_Cache_Sqlite extends Cache implements Cache_Tagging, Cache_GarbageCollect {
+class Kohana_Cache_Sqlite extends Cache implements Kohana_Cache_Tagging, Kohana_Cache_GarbageCollect {
 
 	/**
 	 * Database resource

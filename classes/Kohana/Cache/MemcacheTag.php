@@ -9,7 +9,7 @@
 * @copyright  (c) 2009-2012 Kohana Team
 * @license    http://kohanaphp.com/license
  */
-class Kohana_Cache_MemcacheTag extends Cache_Memcache implements Cache_Tagging {
+class Kohana_Cache_MemcacheTag extends Cache_Memcache implements Kohana_Cache_Tagging {
 
 	/**
 	 * Constructs the memcache object

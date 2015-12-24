@@ -80,7 +80,7 @@
  * @copyright  (c) 2009-2012 Kohana Team
  * @license    http://kohanaphp.com/license
  */
-class Kohana_Cache_Memcache extends Cache implements Cache_Arithmetic {
+class Kohana_Cache_Memcache extends Cache implements Kohana_Cache_Arithmetic {
 
 	// Memcache has a maximum cache lifetime of 30 days
 	const CACHE_CEILING = 2592000;
