@@ -36,7 +36,7 @@
  * @copyright  (c) 2009-2012 Kohana Team
  * @license    http://kohanaphp.com/license
  */
-class Kohana_Cache_Apc extends Cache implements Cache_Arithmetic {
+class Kohana_Cache_Apc extends Cache implements Kohana_Cache_Arithmetic {
 
 	/**
 	 * Check for existence of the APC extension This method cannot be invoked externally. The driver must

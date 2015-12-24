@@ -140,9 +140,9 @@ class Kohana_HTTP_Cache {
 
 		// If this is a destructive request, by-pass cache completely
 		if (in_array($request->method(), array(
-			HTTP_Request::POST, 
-			HTTP_Request::PUT, 
-			HTTP_Request::DELETE)))
+			Kohana_HTTP_Request::POST,
+			Kohana_HTTP_Request::PUT,
+			Kohana_HTTP_Request::DELETE)))
 		{
 			// Kill existing caches for this request
 			$this->invalidate_cache($request);
