@@ -9,7 +9,7 @@
  * @copyright  (c) 2009-2012 Kohana Team
  * @license    http://kohanaphp.com/license
  */
-class Kohana_CacheTest extends PHPUnit_Framework_TestCase {
+class Kohana_Cache_CacheTest extends PHPUnit_Framework_TestCase {
 
 	const BAD_GROUP_DEFINITION  = 1010;
 	const EXPECT_SELF           = 1001;
@@ -45,7 +45,7 @@ class Kohana_CacheTest extends PHPUnit_Framework_TestCase {
 		return array(
 			// Test bad group definition
 			$base+array(
-				Kohana_CacheTest::BAD_GROUP_DEFINITION,
+				static::BAD_GROUP_DEFINITION,
 				'Failed to load Kohana Cache group: 1010'
 			),
 		);
@@ -61,7 +61,7 @@ class Kohana_CacheTest extends PHPUnit_Framework_TestCase {
 	public function test_instance($group, $expected)
 	{
 		if (in_array($group, array(
-			Kohana_CacheTest::BAD_GROUP_DEFINITION,
+			static::BAD_GROUP_DEFINITION,
 			)
 		))
 		{
@@ -121,7 +121,7 @@ class Kohana_CacheTest extends PHPUnit_Framework_TestCase {
 					'persistent' => TRUE,
 				),
 				NULL,
-				Kohana_CacheTest::EXPECT_SELF,
+				static::EXPECT_SELF,
 				array(
 					'server'     => 'otherhost',
 					'port'       => 5555,
@@ -131,7 +131,7 @@ class Kohana_CacheTest extends PHPUnit_Framework_TestCase {
 			array(
 				'foo',
 				'bar',
-				Kohana_CacheTest::EXPECT_SELF,
+				static::EXPECT_SELF,
 				array(
 					'foo'        => 'bar'
 				)
@@ -166,7 +166,7 @@ class Kohana_CacheTest extends PHPUnit_Framework_TestCase {
 	{
 		$cache = $this->getMock('Cache_File', NULL, array(), '', FALSE);
 
-		if ($expected_result === Kohana_CacheTest::EXPECT_SELF)
+		if ($expected_result === static::EXPECT_SELF)
 		{
 			$expected_result = $cache;
 		}

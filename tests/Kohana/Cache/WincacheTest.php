@@ -8,7 +8,6 @@ if (isset($_ENV['TRAVIS']))
 }
 else
 {
-	include_once(Kohana::find_file('tests/cache', 'CacheBasicMethodsTest'));
 
 	/**
 	 * @package    Kohana/Cache
@@ -19,7 +18,7 @@ else
 	 * @copyright  (c) 2009-2012 Kohana Team
 	 * @license    http://kohanaphp.com/license
 	 */
-	class Kohana_WincacheTest extends Kohana_CacheBasicMethodsTest {
+	class Kohana_WincacheTest extends Kohana_Cache_AbstractTest {
 
 		/**
 		 * This method MUST be implemented by each driver to setup the `Cache`
