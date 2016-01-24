@@ -145,7 +145,11 @@ class Kohana_Cache_Apcu extends Cache implements Cache_Arithmetic {
 	 */
 	public function increment($id, $step = 1)
 	{
-		return apcu_inc($id, $step);
+		if (apcu_exists($id)) {
+			return apcu_inc($id, $step);
+		} else {
+			return FALSE;
+		}
 	}
 
 	/**
@@ -160,7 +164,11 @@ class Kohana_Cache_Apcu extends Cache implements Cache_Arithmetic {
 	 */
 	public function decrement($id, $step = 1)
 	{
-		return apcu_dec($id, $step);
+		if (apcu_exists($id)) {
+			return apcu_dec($id, $step);
+		} else {
+			return FALSE;
+		}
 	}
 
 } // End Kohana_Cache_Apcu
