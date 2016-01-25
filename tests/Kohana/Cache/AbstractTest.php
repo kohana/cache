@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @package    Kohana/Cache
  * @group      kohana
@@ -9,7 +8,7 @@
  * @copyright  (c) 2009-2012 Kohana Team
  * @license    http://kohanaphp.com/license
  */
-abstract class Kohana_CacheBasicMethodsTest extends PHPUnit_Framework_TestCase {
+abstract class Kohana_Cache_AbstractTest extends PHPUnit_Framework_TestCase {
 
 	/**
 	 * @var     Cache driver for this test
