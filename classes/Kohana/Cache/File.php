@@ -177,6 +177,11 @@ class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
 			// Otherwise throw the exception
 			throw $e;
 		}
+		catch (RuntimeException $e)
+		{
+		    // Catch RuntimeException when cache file deleted between isFile and openFile
+		    return $default;
+		}
 	}
 
 	/**
