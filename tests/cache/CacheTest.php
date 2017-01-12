@@ -41,14 +41,13 @@ class Kohana_CacheTest extends PHPUnit_Framework_TestCase {
 			);
 		}
 
-
-		return array(
-			// Test bad group definition
-			$base+array(
-				Kohana_CacheTest::BAD_GROUP_DEFINITION,
-				'Failed to load Kohana Cache group: 1010'
-			),
+		// Test bad group definition
+		$base[] = array(
+			Kohana_CacheTest::BAD_GROUP_DEFINITION,
+			'Failed to load Kohana Cache group: 1010'
 		);
+
+		return $base;
 	}
 
 	/**
