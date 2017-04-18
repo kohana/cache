@@ -120,6 +120,9 @@ class Kohana_Cache_Memcache extends Cache implements Cache_Arithmetic {
 			throw new Cache_Exception('Memcache PHP extention not loaded');
 		}
 
+		// Make sure that instant_death is in the default config
+		$config += array('instant_death' => TRUE);
+
 		parent::__construct($config);
 
 		// Setup Memcache
